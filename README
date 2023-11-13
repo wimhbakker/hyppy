@@ -1,0 +1,138 @@
+
+HypPy
+
+HypPy Overview
+
+Hyperspectral Python (HypPy) is a collection of tools developed at the University of Twente. HypPy has adopted the ENVI file format as the image format.
+
+HypPy Features
+
+    Viewer for ENVI format hyperspectral images.
+    Viewer for spectra and spectral libraries.
+    Conversion programs.
+    Simple spectral tools.
+    Band Math.
+    Spectral Math.
+    Minimum Wavelength mapping.
+    Destriping
+    PCA and inverse PCA.
+    Hyperspectral filters.
+    Spectral Angle Mapper (SAM).
+    Rule image classifier.
+    Linear Unmixing (fully constrained).
+    Tools for processing Omega images from the Mars Express.
+    Command-line interface for scripting.
+    Manuals:
+        graphical user-interface
+        scripting with HypPy
+        programming interface
+        spectral math 
+
+HypPy Prerequisites
+
+In order to run, HypPy needs Python3 plus additional modules. These can be picked up by installing the following packages:
+
+    Python
+    NumPy
+    SciPy
+    PIL/Pillow (Python imaging libary)
+    Matplotlib
+    Matplotlib Basemap Toolkit (optional, only needed for viewing shapefiles)
+    OWSlib (optional, needed for WMS get)
+    colour-science (optional, for colour science calculations)
+    PySptools (for Linear Unmixing)
+    pyproj (for conversion to KML) 
+
+Installers for these packages can be found at the pages listed under the quick links menu.
+HypPy Download
+
+HypPy3 has been ported to Python3 and current development and bug-fixes are only continued on the HypPy3 version.
+
+The following packages are needed on Linux:
+
+    python3
+    python3-tk
+    python3-numpy
+    python3-scipy
+    python3-pil
+    python3-pil.imagetk
+    python3-matplotlib
+    python3-mpltoolkits.basemap
+    python3-owslib
+    pip install colour-science
+    pip install pysptools
+    pip install pyproj 
+
+Since there's no regular installer yet, the next best thing you can do is to create a new directory for HypPy and to unpack the tar file into this directory:
+
+$ cd
+$ mkdir HypPy
+$ cd HypPy
+$ tar zxvf ../hyppy.tar.gz
+$ python tkHypPy.pyw
+HypPy Installation, Windows
+
+The easiest way to run HypPy on Windows is to pick up a Portable Python, for instance WinPython. WinPython is a complete portable scientific Python 3 distribution for Windows.
+
+In the download directory above /a minimal winpython with hyppy/ is provided. Read the readme file for instructions. If you prefer to download winpython and hyppy yourself, please continue reading.
+
+Download the latest WinPython with Python 3 and extract the package into a directory. This may be any directory of your choice; that's why it's called a portable Python.
+
+From the WinPython directory run the WinPython control panel.exe. Go to the Advanced tab and Register your WinPython.
+
+There is no uninstall for WinPython. Should you want to get rid of the WinPython then you can do that by simply unregistering first using the WinPython control panel and then to delete the entire WinPython directory tree.
+
+Alternatively, you can install Python 3 and all the required packages yourself.
+
+Next, download the HypPy3 zip file. Create a directory for HypPy. Unzip the hyppy3.zip into this directory.
+
+To start HypPy go to the HypPy directory and double-click the tkHypPy.pyw. The HypPy main menu will pop up in the upper-right corner.
+
+(If you need installers for 64-bit Windows systems, these can be found at this site maintained by Christoph Gohlke.)
+
+(Tip: if Python installers hang on Windows you can trying running the installer as administrator; right-click the installer and click Run as administrator.)
+HypPy Installation, other systems
+
+Install Python 3 plus packages
+
+Pick up the zip file, create a directory HypPy, unzip the hyppy.zip into this directory. To run HypPy double-click the file tkHypPy.pyw.
+
+HypPy Documentation
+
+The documentation of HypPy is contained by the code. The documentation is split into three levels:
+
+1. The User Manual for the graphical user-interface (GUI). 
+2. The Scripting Manual for the conmmandline-interface (CLI). 
+3. The Programming Manual for Pythonites.
+
+As the package is in development, the documentation is never really finished. But I think the documentation is at least 90% complete.
+
+HypPy Contact
+
+HypPy is distributed under the GNU General Public License (GNU-GPL). We don't claim that this software is fit for any purpose. HypPy does have its limitations in the sense that the file size on 32-bit systems is limited to 2 GB (no limits on 64-bit systems) and that the display program was not designed to handle huge images. However, if you find HypPy useful, or if you have comments or contributions, please, send us an e-mail.
+
+If you produce any scientific output using HypPy, please consider citing the references mentioned below.
+Contributors
+
+Jelmer Oosthoek
+
+References
+
+[Bakker 2002]
+    WH Bakker, KS Schmidt, Hyperspectral edge filtering for measuring homogeneity of surface cover types, ISPRS Journal of Photogrammetry and Remote Sensing, vol. 56, ed. 4, pp 246-256, 2002, Elsevier 
+[Bakker 2014]
+    WH Bakker, FJA van Ruitenbeek, HMA van der Werff, TE Zegers, JHP Oosthoek, SH Marsh, FD van der Meer, Processing OMEGA/Mars Express hyperspectral imagery from radiance-at-sensor to surface reflectance, Planetary and Space Science, vol. 90, pages 1-9, 2014, Pergamon 
+[vRuitenbeek 2014]
+    FJA van Ruitenbeek, WH Bakker, HMA van der Werff, TE Zegers, JHP Oosthoek, ZA Omer, SH Marsh, FD van der Meer, Mapping the wavelength position of absorption features between 2.1 and 2.4 μm: a new method for exploratory analysis of OMEGA/Mars Express hyperspectral imagery, Planetary and Space Science, Volume 101, 15 October 2014, Pages 108-117, Pergamon 
+[vdMeer 2018]
+    F van der Meer, V Kopačková, L Koucká, HMA van der Werff, FJA van Ruitenbeek, WH Bakker, Wavelength feature mapping as a proxy to mineral chemistry for investigating geologic systems: An example from the Rodalquilar epithermal system, International Journal of Applied Earth Observation and Geoinformation, Volume 64, 2018, Pages 237-248, Elsevier 
+[Hecker2019]
+    C Hecker, FJA van Ruitenbeek, WH Bakker, BJ Fagbohun, Dean Riley, HMA van der Werff, FD van der Meer, Mapping the wavelength position of mineral features in hyperspectral thermal infrared data, International Journal of Applied Earth Observation and Geoinformation, 79, 133-140. 
+[Hecker2019]
+    C Hecker, FJA van Ruitenbeek, HMA van der Werff, WH Bakker, RD Hewson, FD van der Meer, Spectral Absorption Feature Analysis for Finding Ore: A Tutorial on Using the Method in Geological Remote Sensing, IEEE geoscience and remote sensing magazine, vol 7, issue 2, 2019 
+[vRuitenbeek2020]
+    FJA van Ruitenbeek, J Goseling, WH Bakker, KAA Hein, Shannon entropy as an indicator for sorting processes in hydrothermal systems, Entropy 22 (6), 656 
+[Scafutto2021]
+    RDPM Scafutto, H van der Werff, WH Bakker, F van der Meer, …, An evaluation of airborne SWIR imaging spectrometers for CH4 mapping: Implications of band positioning, spectral sampling and noise, International Journal of Applied Earth Observation and Geoinformation 94, 102233 
+
+Wim Bakker

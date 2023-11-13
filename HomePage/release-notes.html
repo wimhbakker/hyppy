@@ -1,0 +1,117 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+    <title>Hyperspectral Python</title>
+</head>
+<body>
+<header>
+<h1>HypPy</h1>
+<nav>
+<a href="index.html">Home</a>
+<a href="index.html#download">Download</a>
+<a href="release-notes.html">Release Notes</a>
+</nav>
+</header>
+<main>
+
+  <h3>Release Notes</h3>
+<p>
+<ul>
+<li>2023 Mar 8, minor Python syntax fixes.
+<li>2023 Feb 3, new tool for rotating image, tkRot90.py.
+<li>2023 Jan 4, new tool for showing classes, tkShowClasses.py.
+</ul><ul>
+<li>2022 Dec 22, minor fixes on spectrum.py.
+<li>2022 Dec 21, major overhaul of the Spectral Library Viewer.
+<br>Spectra resulting from spectral math expression can now be saved.
+<br>Make sure to set the output directory first.
+<br>Double-click will plot spectra.
+<br>Improved handling of description of ascii spectra.
+<li>2022 Dec 20, added a tool for Spatial Spectral Binning.
+<li>2022 Dec 20, added a tool for Spatial Binning (under Filter).
+<li>2022 Dec 19, added a tool for Spectral Binning (under Filter).
+<li>2022 Nov 7, added support for ED50 to Convert to KML.
+<li>2022 Nov 3, added histogram of display / viewport / sub-image.
+<li>2022 Nov 3, added support for UTM to Convert to KML.
+<li>2022 Oct 27, increase robustness for missing file type in headers
+<li>2022 Sep 30, Image Display now forces reload of color lookup.
+<li>2022 Sep 30, added color lookup capability to rule classifier.
+<li>2022 Sep 26, added 'set all thresholds' button and value.
+<li>2022 Sep 23, new rule image classifier works with thresholds.
+<li>2022 Apr 8, small fixes in destriping filter and spectral math.
+</ul><ul>
+<li>2021 Oct 18, bugfix upper/lower case interleave in hdr
+<li>2021 Sep 17, new tool for histograms: histogram.py
+<li>2021 Sep 7, work on entropy.py and bandmath.py
+<li>2021 Aug 26, decisiontree.py now also accepts ; as comment.
+<li>2021 June 7, added error calculation to linearunmixing.py
+<li>2021 May 25, bug fix tkOpus.py
+<li>2021 May 20, bug fix decisiontree.py
+<li>2021 Apr 8, created CLI for linearunmixing.py
+<li>2021 Apr 8, work on ENVI "pseudo" spectral library with bandnames
+    rather than wavelengths. Updated spectral library conversion
+    resamplespeclib.py
+<li>2021 Apr 6, added tool for Linear Unmixing (fully constraint).
+<li>2021 Mar 18, various fixes, created tkConvertTree.py
+<li>2021 Mar 17, various fixes regarding the use of ENVI Speclibs.
+<li>2021 Mar 15, HypPy can now handle ENVI Speclibs as Images.
+<li>2021 Mar 4, created converttree.py for conversion of ENVI trees.
+<li>2021 Mar 3, new ascii tree format for decisiontree.py
+</ul><ul>
+<li>2020 Dec 3, fixed import sys bug in the speclib viewers.
+<li>2020 Nov 13, bugfix wavelength2index
+<li>2020 Oct 9, bugfix ascspeclib.py
+<li>2020 Oct 8, speedup of specmath, plus minor bug fixes
+<li>2020 Sep 30, added functionality to Speclib Viewer.
+<li>2020 Sep 29, new version of SpecLib Viewer with menu.
+<li>2020 Sep 28, zonalstatistics.py can now handle large images.
+<li>2020 Sep 28, created tkZonalStatistics.py
+<li>2020 Sep 25, created zonalstatistics.py
+<li>2020 Sep 1, progress bar now works for tkSpecMath.py
+<li>2020 Sep 1, new tool for first derivative of spectrum.
+<li>2020 Sep 1, changed the pdf-viewer evince to xdg-open.
+<li>2020 Aug, created makelegend.py and statistics.py (CLI only).
+<li>2020 Aug 18, experimented with FFT.
+<li>2020 Jun 15, destriping filter can now handle large images.
+<li>2020 Apr 16, created tool for spectral slope.
+<li>2020 Jan 9, bug fix of SAM.
+</ul><ul>
+<li>2019 Nov 22, bug fix of the band selector of PCA.
+<li>2019 Nov 20, added Average button to the Spectral Library Viewer.
+<li>2019 Mar 28, bug fixes on decision tree and image wavelengths.
+<li>2019 Feb 7, updates on spectra and spectral library functions.
+</ul><ul>
+<li>2018 Oct 19, "No points given" bug fix in convex hull.
+<li>2018 Oct 5, tokml.py now also converts ENVI Classification images.
+<li>2018 Oct 4, added classstats.py for mean spectrum of classes.
+<li>2018 Oct 3, added decisiontree.py for executing ENVI decision trees.
+<li>2018 Sep 25, bandmath.py now has a commandline interface.
+<li>2018 Sep 13, added fix SWIR for every 8th sample problem.
+<li>2018 Sep 12, added smile analyzer (work in progress).
+<li>2018 Sep 7, added keystone analyzer (work in progress).
+<li>2018 Apr 25, added Movie option to the Image Viewer.
+<li>2018 Apr 24, added a GUI for the GLT geocorrection tool.
+<li>2018 Apr 16, Wavelength Mapper step 1 was completely reimplemented
+    based on spectrum.py and has an added option for matching broad
+    features (for iron for instance).
+<li>2018 Apr 13, spectrum.py now uses scipy's ConvexHull and interp1d
+    for quick convex hull and parabola fitting.
+<li>2018 Mar 28, destriping filter is now 8-neighborhood based instead of 9.
+<li>2018 Feb 23, replaced old-style os.spawn* by subprocess.Popen calls.
+<li>2018 Jan 26, the spectral library viewer now supports Speclib07a files.
+<li>2018 Jan 17, fixed stretch bug for unsigned data types.
+<li>2018 Jan 16, added the robust option for dark and white reference.
+<li>2018 Jan 12, default stretch set to 0 255 linear for wavelength maps.
+<li>2018 Jan 10, minor improvements on the Mars geocoding.
+<li>2018 Jan 9, added azimuthal equidistant projection for Omega polar
+    images.
+    </ul><ul>
+<li>2017 Dec, added support for mean spectral profile from the viewer.
+</ul>
+</p>
+</main>
+<footer>
+<em>Wim Bakker</em>
+</footer>
+</body>
+</html>

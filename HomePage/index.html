@@ -1,0 +1,341 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+    <title>Hyperspectral Python</title>
+</head>
+<body>
+<header>
+<h1>HypPy</h1>
+<nav>
+<a href="index.html">Home</a>
+<a href="index.html#download">Download</a>
+<a href="release-notes.html">Release Notes</a>
+</nav>
+</header>
+<main>
+          <h3>HypPy Overview</h3>
+<p>
+Hyperspectral Python (HypPy) is a collection of tools developed at the
+University of Twente. HypPy has adopted the ENVI file format as the
+image format.
+</p>
+<img src="hyppy-features.jpg">
+
+          <h3>HypPy Features</h3>
+<p>
+<ul>
+<li>Viewer for ENVI format hyperspectral images.
+<li>Viewer for spectra and spectral libraries.
+<li>Conversion programs.
+<li>Simple spectral tools.
+<li>Band Math.
+<li>Spectral Math.
+<li>Minimum Wavelength mapping.
+<li>Destriping
+<li>PCA and inverse PCA.
+<li>Hyperspectral filters.
+<li>Spatial and Spectral binning.
+<li>Spectral Angle Mapper (SAM).
+<li>Rule image classifier.
+<li>Linear Unmixing (fully constrained).
+<li>Command-line interface for scripting.
+<li>Manuals:
+<ul>
+<li>graphical user-interface
+<li>scripting with HypPy
+<li>programming interface
+<li>spectral math
+</ul>
+</ul>
+</p>
+
+          <h3>HypPy Release notes</h3>
+
+See <a href="release_notes.html">release notes</a>
+
+
+          <h3>HypPy Prerequisites</h3>
+<p>
+In order to run, HypPy needs Python 3 plus additional modules. These can
+be picked up by installing the following packages:
+</p>
+<p>
+<ul>
+<li>Python
+<li>NumPy
+<li>SciPy
+<li>PIL/Pillow (Python imaging libary)
+<li>Matplotlib
+<li>Matplotlib Basemap Toolkit (optional, only needed for viewing
+    shapefiles)
+<li>OWSlib (optional, needed for WMS get)
+<li>colour-science (optional, for colour science calculations)
+<li>PySptools (for Linear Unmixing)
+<li>pyproj (for conversion to KML)
+</ul>
+</p>
+<p>
+Installers for these packages can be found at the pages listed under the
+quick links menu.
+</p>
+
+          <h3 id="download">HypPy Download</h3>
+<p>
+HypPy3 has been ported to Python3 and current development and bug-fixes
+are only continued on the HypPy3 version.
+</p>
+<p>
+HypPy3 <a href="https://surfdrive.surf.nl/files/index.php/s/e4y65CdcQq02yDf">download</a>
+</p>
+
+          <h3>HypPy Installation, Linux</h3>
+<p>
+The following packages are needed on Linux:
+<ul>
+<li>python3
+<li>python3-tk
+<li>python3-numpy
+<li>python3-scipy
+<li>python3-pil
+<li>python3-pil.imagetk
+<li>python3-matplotlib
+<li>python3-mpltoolkits.basemap
+<li>python3-owslib
+<li>pip install colour-science
+<li>pip install pysptools
+<li>pip install pyproj
+</ul>
+</p>
+<p>
+Since there's no regular installer yet, the next best thing you can do
+is to create a new directory for HypPy and to unpack the tar file into
+this directory:
+</p>
+<p>
+<code>
+$ cd
+<br>
+$ mkdir HypPy
+<br>
+$ cd HypPy
+<br>
+$ tar zxvf ../hyppy.tar.gz
+<br>
+$ python tkHypPy.pyw
+</code>
+</p>
+
+          <h3>HypPy Installation, Windows</h3>
+<p>
+The easiest way to run HypPy on Windows is to pick up a Portable Python,
+for instance <a href="https://sourceforge.net/projects/winpython/">WinPython</a>.
+WinPython is a complete portable scientific Python 3 distribution for
+Windows.
+</p>
+<p>
+In the download directory above /a minimal winpython with hyppy/ is
+provided. Read the readme file for instructions. If you prefer to
+download winpython and hyppy yourself, please continue reading.
+</p>
+<p>
+
+Download the latest WinPython with Python 3 and extract the package into
+a directory. This may be any directory of your choice; that's why it's
+called a portable Python.
+</p>
+<p>
+
+From the WinPython directory run the WinPython control panel.exe. Go to
+the Advanced tab and Register your WinPython.
+</p>
+<p>
+
+There is no uninstall for WinPython. Should you want to get rid of the
+WinPython then you can do that by simply unregistering first using the
+WinPython control panel and then to delete the entire WinPython
+directory tree.
+</p>
+<p>
+
+Alternatively, you can install Python 3 and all the required packages
+yourself.
+</p>
+<p>
+
+Next, download the HypPy3 zip file. Create a directory for HypPy. Unzip
+the hyppy3.zip into this directory.
+</p>
+<p>
+
+To start HypPy go to the HypPy directory and double-click the
+tkHypPy.pyw. The HypPy main menu will pop up in the upper-right corner.
+</p>
+<p>
+
+(If you need installers for 64-bit Windows systems, these can be found
+at <a href="http://www.lfd.uci.edu/~gohlke/pythonlibs/">this site</a> maintained by
+Christoph Gohlke.)
+</p>
+<p>
+
+(Tip: if Python installers hang on Windows you can trying running the
+installer as administrator; right-click the installer and click Run as
+administrator.)
+</p>
+
+
+          <h3>HypPy Installation, other systems</h3>
+<p>
+Install Python 3 plus packages
+</p>
+<p>
+Pick up the zip file, create a directory HypPy, unzip the hyppy.zip into
+this directory. To run HypPy double-click the file tkHypPy.pyw.
+</p>
+
+          <h3>HypPy Documentation</h3>
+
+<p>
+The documentation of HypPy is contained by the tar file or zip file. The
+documentation is split into three levels:
+</p>
+<p>
+
+ 1. The User Manual for the graphical user-interface (GUI).
+ 2. The Scripting Manual for the conmmandline-interface (CLI).
+ 3. The Programming Manual for Pythonites.
+</p>
+<p>
+
+As the package is in development, the documentation is never really
+finished. But I think the documentation is at least 90% complete.
+</p>
+
+          <h3>HypPy for OMEGA</h3>
+<p>
+If you want to use HypPy for processing Mars Express/OMEGA images,
+please, contact us. There may be a couple of tricks you need to know first!
+</p>
+
+          <h3>HypPy Contact</h3>
+<p>
+HypPy is distributed under the <a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License (GNU-GPL)</a>. We don't claim that this
+software is fit for any purpose. HypPy does have its limitations in the
+sense that the file size on 32-bit systems is limited to 2 GB (no limits
+on 64-bit systems) and that the display program was not designed to
+handle huge images. However, if you find HypPy useful, or if you have
+comments or contributions, please, send us an e-mail.
+</p>
+<p>
+If you produce any scientific output using HypPy, please consider citing
+the references mentioned below.
+</p>
+
+          <h3>Contributors</h3>
+<p>
+Jelmer Oosthoek
+</p>
+
+          <h3>References</h3>
+
+<dl>
+<dt><a href="http://dx.doi.org/10.1016/S0924-2716(02)00060-6">[Bakker 2002]</a></dt>
+<dd>
+WH
+Bakker, KS Schmidt, Hyperspectral edge filtering for measuring
+homogeneity of surface cover types, ISPRS Journal of Photogrammetry and
+Remote Sensing, vol. 56, ed. 4, pp 246-256, 2002, Elsevier
+</dd>
+
+<dt><a href="http://dx.doi.org/10.1016/j.pss.2013.11.007">[Bakker 2014]</a></dt>
+<dd>
+WH Bakker,
+FJA van Ruitenbeek, HMA van der Werff, TE Zegers, JHP Oosthoek, SH
+Marsh, FD van der Meer, Processing OMEGA/Mars Express hyperspectral
+imagery from radiance-at-sensor to surface reflectance, Planetary and
+Space Science, vol. 90, pages 1-9, 2014, Pergamon
+</dd>
+
+<dt><a href="http://dx.doi.org/10.1016/j.pss.2014.06.009">[vRuitenbeek 2014]</a></dt>
+<dd>
+FJA van
+Ruitenbeek, WH Bakker, HMA van der Werff, TE Zegers, JHP Oosthoek, ZA
+Omer, SH Marsh, FD van der Meer, Mapping the wavelength position of
+absorption features between 2.1 and 2.4 &mu;m: a new method for exploratory
+analysis of OMEGA/Mars Express hyperspectral imagery, Planetary and
+Space Science, Volume 101, 15 October 2014, Pages 108-117, Pergamon
+</dd>
+
+<dt><a href="http://dx.doi.org/10.1016/j.jag.2017.09.008">[vdMeer 2018]</a></dt>
+<dd>
+F van der
+Meer, V Kopačková, L Koucká, HMA van der Werff, FJA van Ruitenbeek, WH
+Bakker, Wavelength feature mapping as a proxy to mineral chemistry for
+investigating geologic systems: An example from the Rodalquilar
+epithermal system, International Journal of Applied Earth Observation
+and Geoinformation, Volume 64, 2018, Pages 237-248, Elsevier
+</dd>
+
+<dt><a href="https://doi.org/10.1016/j.jag.2019.02.013">[Hecker2019]</a></dt>
+<dd>
+C Hecker, FJA
+van Ruitenbeek, WH Bakker, BJ Fagbohun, Dean Riley, HMA van der Werff,
+FD van der Meer, Mapping the wavelength position of mineral features in
+hyperspectral thermal infrared data, International Journal of Applied
+Earth Observation and Geoinformation, 79, 133-140.
+</dd>
+
+<dt><a href="https://doi.org/10.1109/MGRS.2019.2899193">[Hecker2019]</a></dt>
+<dd>
+C Hecker, FJA
+van Ruitenbeek, HMA van der Werff, WH Bakker, RD Hewson, FD van der
+Meer, Spectral Absorption Feature Analysis for Finding Ore: A Tutorial
+on Using the Method in Geological Remote Sensing, IEEE geoscience and
+remote sensing magazine, vol 7, issue 2, 2019
+</dd>
+
+<dt><a href="https://doi.org/10.3390/e22060656">[vRuitenbeek2020]</a></dt>
+<dd>
+FJA van
+Ruitenbeek, J Goseling, WH Bakker, KAA Hein, Shannon entropy as an
+indicator for sorting processes in hydrothermal systems, Entropy 22
+(6), 656
+</dd>
+
+<dt><a href="https://doi.org/10.1016/j.jag.2020.102233">[Scafutto2021]</a></dt>
+<dd>
+RDPM
+Scafutto, H van der Werff, WH Bakker, F van der Meer, …, An evaluation
+of airborne SWIR imaging spectrometers for CH4 mapping: Implications of
+band positioning, spectral sampling and noise, International Journal of
+Applied Earth Observation and Geoinformation 94, 102233
+</dd>
+</dl>
+
+          <h3>Quick Links</h3>
+<p>
+<ul>
+<li><a href="https://python.org/">Python</a>
+<li><a href="https://sourceforge.net/projects/winpython/">WinPython</a>
+<li><a href="https://numpy.org/">NumPy</a>
+<li><a href="https://www.scipy.org/">SciPy</a>
+<li><a href="https://pillow.readthedocs.org/">Pillow</a>
+<li><a href="https://matplotlib.org/">Matplotlib</a>
+<li><a href="https://matplotlib.org/basemap/">Basemap</a>
+<li><a href="https://pypi.python.org/pypi/OWSLib/">OWSlib</a>
+<li><a href="https://pysptools.sourceforge.io/">PySptools</a>
+<li><a href="https://github.com/pyproj4/pyproj">pyproj</a>
+</ul>
+
+<ul>
+<li><a href="https://www.utwente.nl/">University of Twente</a>
+<li><a href="https://www.itc.nl/">Faculty ITC</a>
+</ul>
+</p>
+</main>
+<footer>
+<em>Wim Bakker</em>
+</footer>
+</body>
+</html>

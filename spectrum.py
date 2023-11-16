@@ -1609,9 +1609,13 @@ Currently 39 summary products are implemented.
 
         return Spectrum(wavelength=w, spectrum=s).sort()
 
-    def sort(self):
+    def sort(self, reverse=False):
         """Returns a spectrum sorted by wavelength."""
-        return Spectrum(*list(zip(*sorted(zip(self.wavelength, self.spectrum)))), name=self.name, description=self.description)
+        return Spectrum(*list(zip(*sorted(zip(self.wavelength, self.spectrum), reverse=reverse))), name=self.name, description=self.description)
+
+    def sortvalues(self, reverse=False):
+        """Returns a spectrum sorted by value (spectrum)."""
+        return Spectrum(*list(zip(*sorted(zip(self.wavelength, self.spectrum), key=lambda x:x[1], reverse=reverse))), name=self.name, description=self.description)
 
     def fit(self, n=1):
         """Fit a polynomial with order n through spectrum.
@@ -1733,6 +1737,14 @@ same as the behavior of a Spectrum."""
         """Plot pSpectrum as points."""
         pl.plot(self.wavelength, self.spectrum, 'o', *args, **kwargs)
         return 'plot'
+
+    def sort(self, reverse=False):
+        """Returns a spectrum sorted by wavelength."""
+        return pSpectrum(*list(zip(*sorted(zip(self.wavelength, self.spectrum), reverse=reverse))), name=self.name, description=self.description)
+
+    def sortvalues(self, reverse=False):
+        """Returns a spectrum sorted by value (spectrum)."""
+        return pSpectrum(*list(zip(*sorted(zip(self.wavelength, self.spectrum), key=lambda x:x[1], reverse=reverse))), name=self.name, description=self.description)
 
 ## Factory functions.........................
 

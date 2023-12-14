@@ -240,7 +240,7 @@ class Application(Frame):
         frame.grid(row=row, column=0, sticky=W+E)
 
         Label(frame, text="Number of features to match: ").grid(row=0, column=0, sticky=E)
-        Entry(frame, textvariable=self.numFeatures, width=1).grid(row=0, column=1, sticky=W)
+        Entry(frame, textvariable=self.numFeatures, width=2).grid(row=0, column=1, sticky=W)
 
         row = row + 1
 

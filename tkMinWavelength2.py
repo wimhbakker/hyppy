@@ -63,7 +63,7 @@ class Application(Frame):
     
     def do_run(self) :
         n = self.numFeatures.get()
-        if 0<n<4:
+        if 0<n<10:
             self.message("In: " + self.nameIn.get())
             self.message("Out: " + self.nameOut.get())
             self.message("Running, please wait...")
@@ -83,7 +83,7 @@ class Application(Frame):
             except Exception as err:
                 self.message('Exception: %s' % (str(err),))
         else:
-            self.message('Number of features must be 1, 2, or 3')
+            self.message('Number of features must be between 1 and 9')
 
     def do_exit(self):
         root.quit()

@@ -213,7 +213,7 @@ def destriping_filter(fin, fout, foffset=None,
         for x in range(1, im.samples-1):
             
             # lines
-            cube = im[:, x-1:x+2, band-1:band+2].copy()
+            cube = im[:, x-1:x+2, band-1:band+2].astype('d').copy()
             xs = cube[:, 1, 1].copy()
             cube[:, 1, 1] = np.nan  # set middle pixels to nan
             if smallkernel:         # set corner pixels to nan as well
@@ -288,7 +288,11 @@ def destriping_filter(fin, fout, foffset=None,
             if progress:
                 progress(j / float(im.lines))
 
-            im2[j, :, :] = im[j, :, :] + nans[:, :]
+            # the slice is there for avoiding having two advanced indices with a slice in the middle!
+            # j, slice, bands (bands are always advanced indices!).
+            # because then the axes get swapped... (bands, samples)
+            # Now it's [slice, slice, advanced], resulting in dimensions (1, samples, bands)
+            im2[j, :, :] = im[j:j+1, :, :] + nans[:, :]
 
         if progress:
             progress(1.0)

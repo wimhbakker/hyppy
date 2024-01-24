@@ -32,7 +32,14 @@ import numpy
 
 BAND_NAMES = ['interpolated min. wav.',   'interpolated depth',
               'interpolated min. wav. 2', 'interpolated depth 2',
-              'interpolated min. wav. 3', 'interpolated depth 3']
+              'interpolated min. wav. 3', 'interpolated depth 3',
+              'interpolated min. wav. 4', 'interpolated depth 4',
+              'interpolated min. wav. 5', 'interpolated depth 5',
+              'interpolated min. wav. 6', 'interpolated depth 6',
+              'interpolated min. wav. 7', 'interpolated depth 7',
+              'interpolated min. wav. 8', 'interpolated depth 8',
+              'interpolated min. wav. 9', 'interpolated depth 9'
+              ]
 
 def message(s):
     pass
@@ -107,7 +114,7 @@ if __name__ == '__main__':
     parser.add_argument('-w', dest='start', type=float, required=True, help='starting wavelength (float)')
     parser.add_argument('-W', dest='end', type=float, required=True, help='ending wavelength (float)')
     parser.add_argument('-m', dest='mode', choices=('div', 'sub', 'none'), default='div', help='mode: division or subtraction (default: div)')
-    parser.add_argument('-n', dest='numfeatures', choices=(1, 2, 3), type=int, default=1, help='number of features to match (default: 1)')
+    parser.add_argument('-n', dest='numfeatures', choices=(1, 2, 3, 4, 5, 6, 7, 8, 9), type=int, default=1, help='number of features to match (default: 1)')
 
     options = parser.parse_args()
 

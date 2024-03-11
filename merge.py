@@ -107,8 +107,8 @@ if __name__ == '__main__':
     import argparse
     import os
 
-    parser = argparse.ArgumentParser(prog='bandmath.py',
-        description='Band math')
+    parser = argparse.ArgumentParser(prog='merge.py',
+        description='Merge')
 
     parser.add_argument('-s', action='store_true', dest='sort_wavelengths',
                         help='sort bands on wavelength')

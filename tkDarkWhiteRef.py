@@ -77,6 +77,8 @@ class Application(Frame):
                   self.nameWhiteRef.get(), self.nameOut.get(),
                   robust=self.robust.get(),
                   datatype=self.dataType.get(),
+                  correct_dark=self.correct_dark.get(),
+                  correct_white=self.correct_white.get(),
                   message=self.message,
                   progress=self.progressBar)
             self.message("Completed!")
@@ -174,6 +176,12 @@ class Application(Frame):
         self.robust = IntVar()
         self.robust.set(conf.get_option('robust', 1))
 
+        self.correct_dark = IntVar()
+        self.correct_dark.set(conf.get_option('correct_dark', 0))
+
+        self.correct_white = IntVar()
+        self.correct_white.set(conf.get_option('correct_white', 0))
+
         self.dataType = StringVar()
         self.dataType.set(conf.get_option('data-type', 'float32'))
 
@@ -267,7 +275,15 @@ class Application(Frame):
 
         row = row + 1
 
-        Checkbutton(self, text="Use robust white reference (upper 50%)", variable=self.robust).grid(row=row, column=0, sticky=W)
+        Checkbutton(self, text="Use robust white reference, use whitest 50%.", variable=self.robust).grid(row=row, column=0, sticky=W)
+
+        row = row + 1
+
+        Checkbutton(self, text="Correct dark reference bias.", variable=self.correct_dark).grid(row=row, column=0, sticky=W)
+
+        row = row + 1
+
+        Checkbutton(self, text="Correct white panel, assume 98% reflectance.", variable=self.correct_white).grid(row=row, column=0, sticky=W)
 
         row = row + 1
 
@@ -318,5 +334,7 @@ root.mainloop()
 ##conf.set_option('sort-wavelength', app.sortWav.get())
 conf.set_option('data-type', app.dataType.get())
 conf.set_option('robust', app.robust.get())
+conf.set_option('correct_dark', app.correct_dark.get())
+conf.set_option('correct_white', app.correct_white.get())
 
 root.destroy()

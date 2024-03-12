@@ -2,7 +2,8 @@
 ##
 ##      destripe3d.py
 ##
-##   Created: WHB 20160304
+##   Created:  WHB 20160304
+##   Modified: WHB 20240312, added corrections for dark reference and white reference.
 ##
 ## Copyright (C) 2016 Wim Bakker
 ## 
@@ -45,6 +46,8 @@ def message(s):
 def darkwhiteref(fin, fdark, fwhite, fout,
                  datatype='float32',
                  robust=True,
+                 correct_dark=False,
+                 correct_white=False,
                  message=message, progress=None):
 
     im = envi2.Open(fin, sort_wavelengths=False, use_bbl=False)
@@ -53,6 +56,14 @@ def darkwhiteref(fin, fdark, fwhite, fout,
     message("Reading dark image...")
     imdark = envi2.Open(fdark, sort_wavelengths=False, use_bbl=False)
     dark = average_function(imdark[...], axis=0)
+
+    darkbias = 0
+
+    if correct_white:
+        whitepanel = 0.98 # 98% reflecting
+    else:
+        whitepanel = 1.00 # 100% reflecting
+    message(f"White panel: {100 * whitepanel}%")
 
     if progress:
         progress(0.0)
@@ -68,15 +79,31 @@ def darkwhiteref(fin, fdark, fwhite, fout,
             white = average_function(imwhite[...], axis=0)
 
         diff = white - dark
+
+        if correct_dark:
+            darkbias = diff.min()
+            message(f"Dark reference bias: {darkbias}")
+            
+##        message("Determining target bias...")
+##        if correct_dark:
+##            for band in range(im.bands):
+##                if progress:
+##                    progress(band / float(im.bands))
+##                im2[band] = im[band] - dark[np.newaxis, :, band]
+##                darkbias = min(darkbias, im2[band].min())
+##
+##            message(f"Target bias: {darkbias}")
+
         message("Dark & White reference correction...")
 ##        im2[...] = 10000.0 * (im[...] - dark[np.newaxis, :, :]) / diff[np.newaxis, :, :]
         for band in range(im.bands):
             if progress:
                 progress(band / float(im.bands))
             if 'int' in datatype:
-                im2[band] = 10000.0 * (im[band] - dark[np.newaxis, :, band]) / diff[np.newaxis, :, band]
+                im2[band] = whitepanel * 10000.0 * (im[band] - dark[np.newaxis, :, band] - darkbias) / (diff[np.newaxis, :, band] - darkbias)
             else:
-                im2[band] = (im[band] - dark[np.newaxis, :, band]) / diff[np.newaxis, :, band]
+                im2[band] = whitepanel * (im[band] - dark[np.newaxis, :, band] - darkbias) / (diff[np.newaxis, :, band] - darkbias)
+
         del imwhite
     else:
         message("Dark reference correction...")
@@ -85,6 +112,16 @@ def darkwhiteref(fin, fdark, fwhite, fout,
             if progress:
                 progress(band / float(im.bands))
             im2[band] = im[band] - dark[np.newaxis, :, band]
+
+            if correct_dark:
+                darkbias = min(darkbias, im2[band].min())
+
+        if correct_dark:
+            message(f"Correcting target bias: {darkbias}...")
+            for band in range(im.bands):
+                if progress:
+                    progress(band / float(im.bands))
+                im2[band] = im2[band] - darkbias
 
     if progress:
         progress(0.0)

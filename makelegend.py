@@ -66,8 +66,12 @@ def makelegend(nameIn, suppress=False):
     ## PASS 2, draw legend entries
     leg = Image.new('RGB', (512, 70 + len(entries) * 30), color=(255, 255, 255))
 
-    fnt = ImageFont.truetype("Pillow/Tests/fonts/LiberationMono-Regular.ttf", 40)
-    fntsmall = ImageFont.truetype("Pillow/Tests/fonts/LiberationMono-Regular.ttf", 16)
+    try:
+        fnt = ImageFont.truetype("Pillow/Tests/fonts/LiberationMono-Regular.ttf", 40)
+        fntsmall = ImageFont.truetype("Pillow/Tests/fonts/LiberationMono-Regular.ttf", 16)
+    except OSError:
+        fnt = ImageFont.truetype("cour.ttf", 40)
+        fntsmall = ImageFont.truetype("cour.ttf", 16)
 
     # get a drawing context
     d = ImageDraw.Draw(leg)
@@ -83,7 +87,7 @@ def makelegend(nameIn, suppress=False):
         d.rectangle((x0, y0, x1, y1), fill=classrgb)
 #        print(names[i])
         d.text((x1 + 10, y0), classname, font=fntsmall, fill=(0, 0, 0))
-        textsize = d.textsize(classname, font=fntsmall)[0]
+        textsize = d.textlength(classname, font=fntsmall)
         if textsize > maxtextsize:
             maxtextsize = textsize
 

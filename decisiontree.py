@@ -4,6 +4,7 @@
 ## Copyright (C) 2018 Wim Bakker
 ##      Created: WHB 20181002
 ##      Modifeid: WHB 20190322, added lowercase ENVI keywords...
+##      Modified: WHB 20240326, copy coordinates to output header...
 ##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by the
@@ -311,6 +312,9 @@ def dotree(tree, variables, output):
     image = dict()
     band = dict()
     spectra_names = None
+    geo_points = None
+    map_info = None
+    projection_info = None
     for variable in variables:
         im = envi2.Open(variables[variable][0]) # open image
         image[variable] = im
@@ -319,6 +323,13 @@ def dotree(tree, variables, output):
         if spectra_names is None and hasattr(im.header, 'spectra_names'):
             spectra_names = im.header.spectra_names
         band[variable] = int(variables[variable][1])
+        # copy coordinates...
+        if geo_points is None and hasattr(im.header, 'geo_points'):
+            geo_points = im.header.geo_points
+        if map_info is None and hasattr(im.header, 'map_info'):
+            map_info = im.header.map_info
+        if projection_info is None and hasattr(im.header, 'projection_info'):
+            projection_info = im.header.projection_info
 
     if DEBUG:
         print(samples, lines)
@@ -344,7 +355,10 @@ def dotree(tree, variables, output):
                       spectra_names=spectra_names,
                       bands=1,
                       data_type='u1',
-                      byte_order=0)
+                      byte_order=0,
+                      geo_ponts=geo_points,
+                      map_info=map_info,
+                      projection_info=projection_info)
 
     for variable in variables:
         locals()[variable] = image[variable][band[variable]]

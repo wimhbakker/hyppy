@@ -33,10 +33,15 @@ def message(s):
     pass
 
 def scatterplot(fin, xband, yband, yfin=None,
+                fout=None,
                 xmin=None, xmax=None, ymin=None, ymax=None,
                 markersize=1,
           sort_wavelengths=True, use_bbl=True,
            message=message):
+    if fout:
+        import matplotlib
+        matplotlib.use('Agg')
+
     im = envi2.Open(fin, sort_wavelengths=sort_wavelengths, use_bbl=use_bbl)
     if yfin:
         yim = envi2.Open(yfin, sort_wavelengths=sort_wavelengths, use_bbl=use_bbl)
@@ -73,7 +78,10 @@ def scatterplot(fin, xband, yband, yfin=None,
         axis('equal')
     draw()
 
-
+    if fout:
+        savefig(fout)
+        message("Scatterplot saved to %s\n" % (fout,))
+        
     message('\n')
 
     del im
@@ -94,7 +102,9 @@ if __name__ == '__main__':
                       help='sort bands on wavelength')
     parser.add_option('-b', action='store_true', dest='use_bbl',
                       help='use bad band list from the header')
-    parser.add_option('-i', dest='input', help='input file name')
+    parser.add_option('-i', dest='input', help='x-axis input file name')
+    parser.add_option('-j', dest='yinput', help='y-axis input file name')
+    parser.add_option('-o', dest='output', help='output file name (add .pdf .png ...)')
 
     parser.add_option('-x', dest='xband', type='int',
                       help='band for x-axis (starts at 0)')
@@ -110,7 +120,9 @@ if __name__ == '__main__':
     assert options.yband is not None, "Option -y band for y-axis required."
 
     scatterplot(options.input, options.xband, options.yband,
+                yfin=options.yinput,
+                fout=options.output,
               sort_wavelengths=options.sort_wavelengths,
               use_bbl=options.use_bbl)
 
-    show()
+    #show()

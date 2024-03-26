@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 #
-#     tkRatio.py
+#     tkScatterplot.py
 #
 #   Created: WHB 20100930
 #

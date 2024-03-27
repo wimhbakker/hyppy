@@ -99,7 +99,8 @@ def histogram(nameIn,
               band=0,
               wavelength=None,
               bandname=None,
-              plot=False):
+              plot=False,
+              output=None):
     # get ENVI image data
     im = envi2.Open(nameIn, sort_wavelengths=sort_wavelengths, use_bbl=use_bbl)
 
@@ -118,11 +119,20 @@ def histogram(nameIn,
     
     print_histogram(nameIn, band, hist, bins)
 
-    if plot:
+    if plot or output:
         import pylab as plt
 
+        if output:
+            import matplotlib
+            matplotlib.use('Agg')
+
         plt.bar(bins[:-1], hist, align='edge', width=bins[1]-bins[0], fill=False)
-        plt.show()
+
+        if output:
+            plt.savefig(output)
+#            message("Scatterplot saved to %s\n" % (output,))
+        else:
+            plt.show()
 
     # destroy resources
     del im
@@ -140,6 +150,7 @@ if __name__ == '__main__':
     parser.add_argument('-s', action='store_true', dest='sort_wavelengths', help='sort wavelengths')
     parser.add_argument('-plot', action='store_true', dest='plot', help='plot histogram')
     parser.add_argument('-i', dest='input', required=True, help='input file')
+    parser.add_argument('-o', dest='output', required=False, help='output plot file (.pdf .png ...)')
     parser.add_argument('-band', dest='band', type=int, default=0, required=False, help='select band')
     parser.add_argument('-w', dest='wavelength', type=float, required=False, help='select band by wavelength')
     parser.add_argument('-bandname', dest='bandname', type=str, required=False, help='select band by bandname')
@@ -156,6 +167,7 @@ if __name__ == '__main__':
                band=options.band,
                wavelength=options.wavelength,
                bandname=options.bandname,
-               plot=options.plot)
+               plot=options.plot,
+              output=options.output)
 
     sys.exit(0)

@@ -3,6 +3,7 @@
 ##
 ## Copyright (C) 2018 Wim Bakker
 ##      Created: WHB 20181008, CLI of the SpecMath GUI...
+##      Modified: WHB 20240327, added mask
 ##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by the
@@ -41,7 +42,7 @@ from spectrum import Spectrum
 def message(s):
     print(s)
 
-def specmath(fin, fout, expression, data_type=None,
+def specmath(fin, fout, expression, maskfile=None, data_type=None,
              sort_wavelengths=False, use_bbl=False, message=message,
              progress=None):
     message("Input file(s): %s" % fin)
@@ -62,6 +63,11 @@ def specmath(fin, fout, expression, data_type=None,
                 data_type = hdr.data_type
 
         imlist.append(im)
+
+    mask = None
+    if maskfile:
+        mask = envi2.Open(maskfile)
+        assert mask.lines==hdr.lines and mask.samples==hdr.samples, "Mask extent must match image extent."
 
     message('Evaluating: %s' % (expression,))
     ## Try the expression once for the very first pixel
@@ -93,7 +99,7 @@ def specmath(fin, fout, expression, data_type=None,
 
     message("Output image will have %d band(s)" % (bands,))
 
-    imout = envi2.New(fout,
+    imout = envi2.New(fout, value=numpy.nan,
                       hdr=hdr, data_type='f' if data_type=='f' else 'd', # data_type=data_type,
                       bands=bands,
                       wavelength=wavelength,
@@ -110,37 +116,38 @@ def specmath(fin, fout, expression, data_type=None,
     for j in range(lines):
         if progress: progress(j / float(lines-1))
         for i in range(imlist[0].samples):
-            ## Loop over the set of input images to collect spectra
-            for k in range(len(imlist)):
-##                myS = Spectrum(wavelength=imlist[k].wavelength, spectrum=imlist[k][j, i],
-##                               wavelength_units=getattr(imlist[k].header, 'wavelength_units', None))
-##
-##                ## Construct a variable name
-##                vars()['S%d' % (k+1,)] = myS
+            if not mask or mask[j, i, 0]:
+                ## Loop over the set of input images to collect spectra
+                for k in range(len(imlist)):
+    ##                myS = Spectrum(wavelength=imlist[k].wavelength, spectrum=imlist[k][j, i],
+    ##                               wavelength_units=getattr(imlist[k].header, 'wavelength_units', None))
+    ##
+    ##                ## Construct a variable name
+    ##                vars()['S%d' % (k+1,)] = myS
 
-                # Recycle Spectrum object and replace spectrum for speedup...
-                vars()['S%d' % (k+1,)].spectrum = imlist[k][j, i]
-                
-            try:
-                #S = S1 # first is also known as S... (this doesn't work...)
-                result = eval(expression)
-                if isinstance(result, Spectrum):
-                    result = result.spectrum
-                    # what about wavelength?
-                elif not isinstance(result, collections.abc.Iterable): # scalar
-                    pass
-                else: # result is a tuple or a value
-                    result = numpy.ndarray.flatten(result) # result is always a list
+                    # Recycle Spectrum object and replace spectrum for speedup...
+                    vars()['S%d' % (k+1,)].spectrum = imlist[k][j, i]
+                    
                 try:
-                    imout[j, i] = result
-                except ValueError: # arrays don't match!
-                    result = result[:bands]
-                    lenresult = len(result)
-                    imout[j, i, :lenresult] = result
-                    imout[j, i, lenresult:] = nan
-            except Exception as e:
-                message(repr(e))
-                return
+                    #S = S1 # first is also known as S... (this doesn't work...)
+                    result = eval(expression)
+                    if isinstance(result, Spectrum):
+                        result = result.spectrum
+                        # what about wavelength?
+                    elif not isinstance(result, collections.abc.Iterable): # scalar
+                        pass
+                    else: # result is a tuple or a value
+                        result = numpy.ndarray.flatten(result) # result is always a list
+                    try:
+                        imout[j, i] = result
+                    except ValueError: # arrays don't match!
+                        result = result[:bands]
+                        lenresult = len(result)
+                        imout[j, i, :lenresult] = result
+                        imout[j, i, lenresult:] = nan
+                except Exception as e:
+                    message(repr(e))
+                    return
             
     if progress: progress(1.0)          
     message('Completed!')
@@ -158,6 +165,7 @@ if __name__ == '__main__':
     parser.add_argument('-b', action='store_true', dest='use_bbl',
                         help='use bad band list from the header')
     parser.add_argument('-o', dest='output', help='output image file name', required=True)
+    parser.add_argument('-m', dest='maskfile', help='input mask file name (optional)', required=False)
     parser.add_argument('-t', dest='data_type', help='output data type (double, float32, int32, uint16, ...)')
     parser.add_argument('-e', dest='expression', help='Python expression', required=True)
     parser.add_argument('filenames', metavar='image', type=str, nargs='+',
@@ -166,6 +174,7 @@ if __name__ == '__main__':
     options = parser.parse_args()
 
     specmath(options.filenames, options.output, options.expression,
+             maskfile=options.maskfile,
              data_type=options.data_type,
              sort_wavelengths=options.sort_wavelengths,
              use_bbl=options.use_bbl)

@@ -110,6 +110,7 @@ class Application(Frame):
         fnames = self.listbox.get(0, END)
         try:
             specmath.specmath(fnames, self.nameOut.get(), self.expression.get(),
+                              maskfile=self.nameMask.get(),
                               message=self.message,
                               progress=self.progressBar,
                               sort_wavelengths=self.sortWav.get(),
@@ -221,6 +222,16 @@ class Application(Frame):
                 self.listbox.insert(END, fname)
             self.listbox.see(END)
             
+    def pick_mask(self):
+        self.message("Pick input mask file.")
+        idir = conf.get_option('mask-dir')
+        name = askopenfilename(title='Open Input Mask File',
+                                   initialdir=idir,
+                                   initialfile='')
+        if name:
+            conf.set_option('mask-dir', os.path.dirname(name))
+            self.nameMask.set(name)
+
     def pick_output(self):
         self.message("Pick output file.")
         odir = conf.get_option('output-dir')
@@ -275,6 +286,7 @@ class Application(Frame):
     def makeWindow(self, master):
         # variables
         self.nameOut = StringVar()
+        self.nameMask = StringVar()
 
         self.expression = StringVar()
         self.expression.set(conf.get_option('expression', '', type_=str))
@@ -344,10 +356,14 @@ class Application(Frame):
         self.frame2.grid(row=row, column=0, sticky=N+E+S+W)
         self.frame2.columnconfigure(1, weight=1)
         self.frame2.rowconfigure(0, weight=1)
+
+        Label(self.frame2, text="Input Mask").grid(row=0, column=0, sticky=W)
+        Entry(self.frame2, textvariable=self.nameMask).grid(row=0, column=1, sticky=W+E)
+        Button(self.frame2, text='...', command=self.pick_mask).grid(row=0, column=2, sticky=W)
         
-        Label(self.frame2, text="Output:").grid(row=0, column=0, sticky=W)
-        Entry(self.frame2, textvariable=self.nameOut).grid(row=0, column=1, sticky=W+E)
-        Button(self.frame2, text='Browse', command=self.pick_output).grid(row=0, column=2, sticky=W)
+        Label(self.frame2, text="Output:").grid(row=1, column=0, sticky=W)
+        Entry(self.frame2, textvariable=self.nameOut).grid(row=1, column=1, sticky=W+E)
+        Button(self.frame2, text='...', command=self.pick_output).grid(row=1, column=2, sticky=W)
 
         row = row + 1
 

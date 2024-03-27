@@ -1,4 +1,4 @@
 #!/usr/bin/python3
-about = """Copyright (C) 2009-2023 Wim Bakker
-GNU General Public License, Version 3
+about = """Copyright © 2009-2024 Wim Bakker
+GNU General Public License v3.0
 """

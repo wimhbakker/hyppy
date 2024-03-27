@@ -68,14 +68,46 @@ def scatterplot(fin, xband, yband, yfin=None,
     xlabel(xtext)
     ylabel(ytext)
     if yfin:
-        title('Scatterplot: X=%s, Y=%s' % (os.path.basename(fin), os.path.basename(yfin)))
+        title('Scatterplot\nX = %s\nY = %s' % (os.path.basename(fin), os.path.basename(yfin)))
     else:
-        title('Scatterplot: %s' % (os.path.basename(fin),))
+        title('Scatterplot\n%s' % (os.path.basename(fin),))
 ##    legend(loc=0)
-    if xmin and xmax and ymin and ymax:
-        axis([float(xmin), float(xmax), float(ymin), float(ymax)])
-    else:
-        axis('equal')
+##    if xmin and xmax and ymin and ymax:
+##        axis([float(xmin), float(xmax), float(ymin), float(ymax)])
+##    else:
+##        axis('equal')
+
+##    if xmin:
+##        axis(xmin=xmin)
+##    if xmax:
+##        axis(xmax=xmax)
+##    if ymin:
+##        axis(ymin=ymin)
+##    if ymax:
+##        axis(ymax=ymax)
+
+    try:
+        xmin = float(xmin)
+    except:
+        xmin = None
+        
+    try:
+        xmax = float(xmax)
+    except:
+        xmax = None
+        
+    try:
+        ymin = float(ymin)
+    except:
+        ymin = None
+        
+    try:
+        ymax = float(ymax)
+    except:
+        ymax = None
+        
+    axis([xmin, xmax, ymin, ymax])
+
     draw()
 
     if fout:

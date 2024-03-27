@@ -142,6 +142,14 @@ if __name__ == '__main__':
                       help='band for x-axis (starts at 0)')
     parser.add_option('-y', dest='yband', type='int',
                       help='band for y-axis (starts at 0)')
+    parser.add_option('--xmin', dest='xmin', type='float',
+                      help='minimum for x-axis (default=auto)')
+    parser.add_option('--xmax', dest='xmax', type='float',
+                      help='maximum for x-axis (default=auto)')
+    parser.add_option('--ymin', dest='ymin', type='float',
+                      help='minimum for y-axis (default=auto)')
+    parser.add_option('--ymax', dest='ymax', type='float',
+                      help='maximum for y-axis (default=auto)')
 
     parser.set_defaults(sort_wavelengths=False, use_bbl=False)
 
@@ -154,6 +162,7 @@ if __name__ == '__main__':
     scatterplot(options.input, options.xband, options.yband,
                 yfin=options.yinput,
                 fout=options.output,
+                xmin=options.xmin, xmax=options.xmax, ymin=options.ymin, ymax=options.ymax,
               sort_wavelengths=options.sort_wavelengths,
               use_bbl=options.use_bbl)
 

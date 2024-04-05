@@ -7,7 +7,7 @@ tags:
   - galactic dynamics
   - milky way
 authors:
-  - name: Adrian M. Price-Whelan
+  - name: Edrian M. Price-Whelan
     orcid: 0000-0000-0000-0000
     equal-contrib: true
     affiliation: "1, 2" # (Multiple affiliations must be quoted)

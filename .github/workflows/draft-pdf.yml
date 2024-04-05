@@ -30,4 +30,5 @@ jobs:
         with:
           message: '(auto) Paper PDF Draft'
           add: 'paper/*.pdf'
-          push: origin HEAD:main
+          author_name: Wim Bakker
+          author_email: w.h.bakker@utwente.nl

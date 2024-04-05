@@ -38,7 +38,7 @@ import os
 import sys
 
 from scipy.integrate import trapz
-from scipy.signal import medfilt, bspline
+from scipy.signal import medfilt
 import scipy.spatial
 from scipy.interpolate import interp1d, UnivariateSpline
 from scipy.stats import entropy

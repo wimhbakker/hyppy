@@ -259,6 +259,7 @@ Spectrum names can also be used as indices.
         fnames.extend(self._glob_files(dname, 'tab', recursive))
         fnames.extend(self._glob_files(dname, 'sco', recursive))
         fnames.extend(self._glob_files(dname, 'asd', recursive))
+        fnames.extend(self._glob_files(dname, 'sed', recursive))
         fnames.extend(self._glob_files(dname, '[0-9][0-9][0-9]', recursive))
 
         if 'win' not in sys.platform:
@@ -268,6 +269,7 @@ Spectrum names can also be used as indices.
             fnames.extend(self._glob_files(dname, 'TAB', recursive))
             fnames.extend(self._glob_files(dname, 'SCO', recursive))
             fnames.extend(self._glob_files(dname, 'ASD', recursive))
+            fnames.extend(self._glob_files(dname, 'SED', recursive))
 
         for ext in OPUS_DATATYPES:
             fnames.extend(self._glob_files(dname, ext, recursive))
@@ -452,6 +454,15 @@ These may be microns, nanometers or ???
                 w, r, d = line.strip().split()
                 if w != DELETED_NUMBER and r != DELETED_NUMBER:
                     result.append([float(w), float(r)])
+        elif 'SpectralEvolution' in data[2] or data[2].lower().endswith('.sed'): # assume .SED ascii speclib format
+            description = data[2].strip()
+            data = data[28:]
+
+            result = []
+            
+            for line in data:
+                w, *_, r = line.strip().split()
+                result.append([float(w), float(r)])
         elif 'splib07a' in data[0]:
             description = data[0].strip()
             try:

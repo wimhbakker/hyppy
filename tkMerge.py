@@ -143,7 +143,7 @@ class Application(Frame):
         if names:
             if not isinstance(names, tuple): # for Windows!
                 if '{' in names:
-                    names = re.findall('\{([^\}]*)\}', names)
+                    names = re.findall(r'\{([^\}]*)\}', names)
                 else:
                     names = [names]
             curdir = os.path.dirname(names[0])

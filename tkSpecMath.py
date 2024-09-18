@@ -214,7 +214,7 @@ class Application(Frame):
         if names:
             if not isinstance(names, tuple): # for Windows!
                 if '{' in names:
-                    names = re.findall('\{([^\}]*)\}', names)
+                    names = re.findall(r'\{([^\}]*)\}', names)
                 else:
                     names = [names]
             conf.set_option('input-dir', os.path.dirname(names[0]))

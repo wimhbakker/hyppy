@@ -167,7 +167,7 @@ def save_legend_vertical(palette, w0, w1, d0, d1, name):
         plt.ylabel('Wavelength (%s)' % ('micron' if w1<100 else 'nm',),
                    fontsize=20, labelpad=15)
     else:
-        plt.ylabel('Wavelength (%s)' % ('$\mu$m' if w1<100 else 'nm',),
+        plt.ylabel('Wavelength (%s)' % (r'$\mu$m' if w1<100 else 'nm',),
                    fontsize=20, labelpad=15)
         
     plt.xlabel('Depth (%)', fontsize=20)

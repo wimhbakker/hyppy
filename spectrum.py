@@ -37,7 +37,8 @@ import numpy
 import os
 import sys
 
-from scipy.integrate import trapz
+#from scipy.integrate import trapz
+from scipy.integrate import trapezoid
 from scipy.signal import medfilt
 import scipy.spatial
 from scipy.interpolate import interp1d, UnivariateSpline
@@ -581,9 +582,9 @@ The shoulders are not necessarily in sorted order."""
     def integrate(self):
         """Integrate spectrum.
 
-Calculates the area under a spectrum using the scipy.integrate.trapz
+Calculates the area under a spectrum using the scipy.integrate.trapezoid
 function."""
-        return trapz(self.spectrum, self.wavelength)
+        return trapezoid(self.spectrum, self.wavelength)
 
     def interpol(self, w):
         """Linear interpolation of spectrum at wavelength w.

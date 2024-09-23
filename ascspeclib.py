@@ -418,6 +418,7 @@ These may be microns, nanometers or ???
         return self[s].resampled(w)
 
     def read_spectrum(self, fname):
+#        print(f"read spectrum binary {fname}")
         f = open(fname, 'rb') # first try binary
         data = f.read(1000)
         f.close()
@@ -430,6 +431,7 @@ These may be microns, nanometers or ???
             return spectrum.Spectrum(name=os.path.basename(fname), wavelength=numpy.array(w),
                                      spectrum=numpy.array(r), description=description)
 
+#        print("read spectrum ascii")
         try:
             f = open(fname, 'r') # second, try text
             data = f.readlines()
@@ -439,7 +441,8 @@ These may be microns, nanometers or ???
 
         if len(data) == 0:
             return None
-
+        
+#        print("try famous formats")
         if 'PDS' in data[0]: # assume CRISM ascii speclib format
             w, r, description = crismread.crism_read_spectrum(fname)
             return spectrum.Spectrum(name=os.path.basename(fname), wavelength=numpy.array(w),
@@ -454,7 +457,7 @@ These may be microns, nanometers or ???
                 w, r, d = line.strip().split()
                 if w != DELETED_NUMBER and r != DELETED_NUMBER:
                     result.append([float(w), float(r)])
-        elif 'SpectralEvolution' in data[2] or data[2].lower().endswith('.sed'): # assume .SED ascii speclib format
+        elif (len(data) > 2) and ('SpectralEvolution' in data[2] or data[2].lower().endswith('.sed')): # assume .SED ascii speclib format
             description = data[2].strip()
             data = data[28:]
 
@@ -484,7 +487,7 @@ These may be microns, nanometers or ???
                                      spectrum=r, description=description)
         else:   # assuming 2-column data, cross your fingers...
 ##            description = data[0] # maybe there's something in line 1?
-
+#            print("two-column data")
             description = ''
             result = []
             

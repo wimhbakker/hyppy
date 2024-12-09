@@ -510,16 +510,26 @@ def latlon_geo_correction(fin, fout,
     axis('equal')
     draw()
 
-    diff = numpy.abs(lons[:, -1] - lons[:, 0])
-    dxmin = diff.min() / gc.samples
-    dxmax = diff.max() / gc.samples
+    diff = numpy.abs(lons[:, -1] - lons[:, 0]) # doesn't work if the image is rotated
+    print(f"diff {diff}")
+##    dxmin = diff.min() / gc.samples
+##    dxmax = diff.max() / gc.samples
+    dxmin = (xmax - xmin) / gc.samples
+    dxmax = (xmax - xmin) / gc.samples
+    print(f"dxmin dxmax {dxmin} {dxmax}")
 
     diff = numpy.abs(lats[-1, :] - lats[0, :])
-    dymin = diff.min() / gc.lines
-    dymax = diff.max() / gc.lines
+    print(f"diff {diff}")
+##    dymin = diff.min() / gc.lines
+##    dymax = diff.max() / gc.lines
+    dymin = (ymax - ymin) / gc.lines
+    dymax = (ymax - ymin) / gc.lines
+    print(f"dymin dymax {dymin} {dymax}")
 
     delta = min(dxmin, dymin)
+    print(f"delta {delta}")
     tol = 1.05 * numpy.hypot(dxmax, dymax) / 2.0
+    print(f"tol {tol}")
 
     message('Bounding box: ' + str([xmin, xmax, ymin, ymax]))
     message('Delta: ' + str(delta))
@@ -527,6 +537,7 @@ def latlon_geo_correction(fin, fout,
 
     samples = int((xmax - xmin) // delta) + 1
     lines = int((ymax - ymin) // delta) + 1
+    print(f"samples lines {samples} {lines}")
 
     # set up geo_points for pseudo-geographic coordinates
     # UL, UR, LL, LR

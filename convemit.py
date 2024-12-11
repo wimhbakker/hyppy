@@ -47,6 +47,9 @@ def read_emit_2a(filename, message=message, progress=None):
     east = rootgrp.easternmost_longitude
     south = rootgrp.southernmost_latitude
     north = rootgrp.northernmost_latitude
+    description = f"""{rootgrp.title}
+{date}
+{spatial_ref}"""
 
     if 'reflectance' in rootgrp.variables.keys():
         ## Reflectance data
@@ -55,8 +58,11 @@ def read_emit_2a(filename, message=message, progress=None):
         lines, samples, bands = rootgrp.variables['reflectance'].get_dims()
         lines, samples, bands = lines.size, samples.size, bands.size
         message(f"{lines}, {samples}, {bands}")
+        byte_order = 0 if rootgrp.variables['reflectance'].endian() == 'little' else 1
+        data_ignore_value = rootgrp.variables['reflectance']._FillValue
+        message(f"Fill value {data_ignore_value}")
         data_type = rootgrp.variables['reflectance'].dtype.type
-        message(data_type)
+        message(f"Data type {data_type}")
 
         ## group sensor_band_parameters
         # wavelengths
@@ -70,13 +76,15 @@ def read_emit_2a(filename, message=message, progress=None):
 
         im = envi2.New(basename + '_refl', lines=lines, samples=samples, bands=bands, \
                        wavelength=wavelengths, fwhm=fwhm, bbl=bbl, data_type=data_type, \
-                       file_type=ENVI_Standard, interleave=ENVI_BIL)
+                       file_type=ENVI_Standard, interleave=ENVI_BIL,
+                       byte_order=byte_order, data_ignore_value=data_ignore_value,
+                       description=description)
                        
         im[...] = rootgrp.variables['reflectance'][...].data
         del im
 
         ## group location
-        message('location')
+        message('location data')
         # longitude
         # lines, samples, bands
         lines, samples = rootgrp.groups['location'].variables['lon'].get_dims()
@@ -97,7 +105,7 @@ def read_emit_2a(filename, message=message, progress=None):
         del im
 
         # elevation
-        message('elevation')
+        message('elevation data')
         lines, samples = rootgrp.groups['location'].variables['elev'].get_dims()
         lines, samples = lines.size, samples.size
         message(f"{lines}, {samples}")
@@ -112,7 +120,7 @@ def read_emit_2a(filename, message=message, progress=None):
         im[0] = rootgrp.groups['location'].variables['elev'][...].data
 
         # glt_x, int32
-        message('glt')
+        message('glt data')
         lines, samples = rootgrp.groups['location'].variables['glt_x'].get_dims()
         lines, samples = lines.size, samples.size
         message(f"{lines}, {samples}")

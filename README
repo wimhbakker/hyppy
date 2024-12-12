@@ -42,6 +42,7 @@ In order to run, HypPy needs Python3 plus additional modules. These can be picke
     colour-science (optional, for colour science calculations)
     PySptools (for Linear Unmixing)
     pyproj (for conversion to KML) 
+    netCDF4 (for conversion of EMIT data)
 
 Installers for these packages can be found at the pages listed under the quick links menu.
 HypPy Download
@@ -62,6 +63,7 @@ The following packages are needed on Linux:
     pip install colour-science
     pip install pysptools
     pip install pyproj 
+    pip install netCDF4
 
 Since there's no regular installer yet, the next best thing you can do is to create a new directory for HypPy and to unpack the tar file into this directory:
 

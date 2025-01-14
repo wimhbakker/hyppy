@@ -129,10 +129,12 @@ class Application(Frame):
         # frame zones
         frame = Frame(self, bd=2, relief=GROOVE)
         frame.grid(row=row, column=0, sticky=W+E)
+        frame.columnconfigure(1, weight=1)
+        frame.rowconfigure(0, weight=1)
 
         Label(frame, text="Zones").grid(row=0, column=0, sticky=W)
-        Entry(frame, textvariable=self.zones, width=25).grid(row=0, column=1, sticky=W+E)
-        Button(frame, text='...', command=self.pick_zones).grid(row=0, column=2, sticky=E)
+        Entry(frame, textvariable=self.zones).grid(row=0, column=1, sticky=W+E)
+        Button(frame, text='...', command=self.pick_zones).grid(row=0, column=2, sticky=W)
 
         row = row + 1
 

@@ -75,7 +75,7 @@ def specmath(fin, fout, expression, maskfile=None, data_type=None,
         myS = Spectrum(wavelength=imlist[k].wavelength, spectrum=imlist[k][0, 0],
                        wavelength_units=getattr(imlist[k].header, 'wavelength_units', None))
         ## Construct a variable name
-        vars()['S%d' % (k+1,)] = myS
+        globals()['S%d' % (k+1,)] = myS
 
     try:
         ## result can be Spectrum, tuple or value...
@@ -126,7 +126,7 @@ def specmath(fin, fout, expression, maskfile=None, data_type=None,
     ##                vars()['S%d' % (k+1,)] = myS
 
                     # Recycle Spectrum object and replace spectrum for speedup...
-                    vars()['S%d' % (k+1,)].spectrum = imlist[k][j, i]
+                    globals()['S%d' % (k+1,)].spectrum = imlist[k][j, i]
                     
                 try:
                     #S = S1 # first is also known as S... (this doesn't work...)

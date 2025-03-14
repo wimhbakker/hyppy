@@ -4,6 +4,7 @@
 ## Copyright (C) 2018 Wim Bakker
 ##      Created: WHB 20181008, CLI of the SpecMath GUI...
 ##      Modified: WHB 20240327, added mask
+##      Modified: WHB 20250314, changed vars() to globals()
 ##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by the

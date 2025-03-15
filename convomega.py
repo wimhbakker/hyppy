@@ -198,7 +198,7 @@ def read_omega(filename, message=message, progress=None):
         message("Saving latitude and longitude L")
         im = envi2.New(filename + "_latlon_l", file_type=ENVI_Standard, lines=lines, samples=samples, \
                    bands=2, data_type=lat_l.dtype, byte_order=byte_order, \
-                   band_names=["latitude L", "longitude L"], \
+                   band_names=["latitude", "longitude"], \
                    interleave=ENVI_BIP)
 
         im[:, :, 0] = lat_l[...]
@@ -215,7 +215,7 @@ def read_omega(filename, message=message, progress=None):
         message("Saving latitude and longitude V")
         im = envi2.New(filename + "_latlon_v", file_type=ENVI_Standard, lines=lines, samples=samples, \
                    bands=2, data_type=lat_v.dtype, byte_order=byte_order, \
-                   band_names=["latitude V", "longitude V"], \
+                   band_names=["latitude", "longitude"], \
                    interleave=ENVI_BIP)
 
         im[:, :, 0] = lat_v[...]

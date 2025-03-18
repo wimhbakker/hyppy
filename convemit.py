@@ -42,14 +42,15 @@ def read_emit_2a(filename, message=message, progress=None):
     ## some metadata
     message(rootgrp.title)
     spatial_ref = rootgrp.spatial_ref
-    date = rootgrp.date_created
-    west = rootgrp.westernmost_longitude
-    east = rootgrp.easternmost_longitude
+    date  = rootgrp.date_created
+    west  = rootgrp.westernmost_longitude
+    east  = rootgrp.easternmost_longitude
     south = rootgrp.southernmost_latitude
     north = rootgrp.northernmost_latitude
+    res   = rootgrp.spatialResolution  # capital R!
     description = f"""{rootgrp.title}
-{date}
-{spatial_ref}"""
+{date}"""
+    coordinate_system_string = f"{spatial_ref}"
 
     if 'reflectance' in rootgrp.variables.keys():
         ## Reflectance data
@@ -74,11 +75,17 @@ def read_emit_2a(filename, message=message, progress=None):
         # bbl: variable good_wavelengths
         bbl = rootgrp.groups['sensor_band_parameters'].variables['good_wavelengths'][...].data
 
+        map_info = ["Geogrphic Lat/Lon", 1.5, 1.5, west, north, res, res, \
+                    "WGS-84", "units=Degrees"]
+        message(f"{map_info}")
+
         im = envi2.New(basename + '_refl', lines=lines, samples=samples, bands=bands, \
                        wavelength=wavelengths, fwhm=fwhm, bbl=bbl, data_type=data_type, \
                        file_type=ENVI_Standard, interleave=ENVI_BIL,
                        byte_order=byte_order, data_ignore_value=data_ignore_value,
-                       description=description)
+                       description=description, \
+                       coordinate_system_string=coordinate_system_string, \
+                       map_info=map_info)
                        
         im[...] = rootgrp.variables['reflectance'][...].data
         del im

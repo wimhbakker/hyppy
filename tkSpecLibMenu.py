@@ -37,6 +37,7 @@ import os
 import collections
 import numpy
 import sys
+import subprocess
 
 from tkinter import *
 from tkinter.filedialog import *
@@ -77,11 +78,13 @@ def make_command(action):
 def command(action):
     '''Execute menu button command'''
     if action.lower().endswith('.py'):        
-        return os.spawnv(os.P_NOWAIT, PYTHON, [PYTHON, action])
+##        return os.spawnv(os.P_NOWAIT, PYTHON, [PYTHON, action])
+        return subprocess.Popen([PYTHON, action])
     if action.lower().endswith('.pdf'):
         thePDF = os.path.join(os.getcwd(), action)
         try:
-            return os.spawnvp(os.P_NOWAIT, PDFREADER, [PDFREADER, thePDF])
+##            return os.spawnvp(os.P_NOWAIT, PDFREADER, [PDFREADER, thePDF])
+            return subprocess.Popen([PDFREADER, thePDF])
         except AttributeError:  # Good Grief! We're on Windows???
             return os.startfile(thePDF)
 

@@ -23,7 +23,7 @@
 ##     Netherlands
 ##
 
-from numpy import nanmin, nanmax, where, isnan, fabs
+from numpy import nanmin, nanmax, where, isfinite, fabs
 ##from scipy.stats.stats import nanmean, nanstd, nanmedian, cumfreq
 from numpy import nanmean, nanstd
 
@@ -44,7 +44,7 @@ def minmax_stretch(b):
 def percent_stretch(b, perc=0.01):
     band = b.flatten()
     # skip the NaN's
-    band = band[where(isnan(band)==False)]
+    band = band[where(isfinite(band)==True)]
     if len(band) == 0: # all NaN's
         return b.astype('u1')
     else:
@@ -56,7 +56,7 @@ def percent_stretch(b, perc=0.01):
 def percent_percent_stretch(b, percmin=0.01, percmax=0.99):
     band = b.flatten()
     # skip the NaN's
-    band = band[where(isnan(band)==False)]
+    band = band[where(isfinite(band)==True)]
     if len(band) == 0: # all NaN's
         return b.astype('u1')
     else:

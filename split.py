@@ -62,22 +62,22 @@ def split(fin, choice='JPEG', sort_wavelengths=False, use_bbl=False,
             imout.save(fout + '.png', 'PNG')
         elif choice=='ENVI':
             wavelength = None
-            if getattr(im, 'wavelength', None):
+            if hasattr(im, 'wavelength'):
                 wavelength = [im.wavelength[i]]
 
             band_names = None
-            if getattr(im, 'band_names', None):
+            if hasattr(im, 'band_names'):
                 band_names = [im.band_names[i]]
 
             fwhm = None
-            if getattr(im, 'fwhm', None):
+            if hasattr(im, 'fwhm'):
                 fwhm = [im.fwhm[i]]
 
             im2 = envi2.New(fout, hdr=im, bands=1, bbl=None,
                             band_names=band_names,
                             wavelength=wavelength,
                             fwhm=fwhm, default_bands=None)
-            im2[...] = im[i]
+            im2[:,:,0] = im[i]
             del im2
 
     if progress:

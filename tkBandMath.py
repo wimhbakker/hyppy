@@ -70,6 +70,7 @@ class Application(Frame):
 
         self.message('Images are numbered i1, i2, i3, ..., i20.')
         self.message('Bands can be indicated by band number (e.g. i1[70]), or by wavelength: (e.g. i2(2.0113)).')
+        self.message('For wavelengths you can now also use i2[2.0113] instead of i2(2.0113).')
         self.message('''Expressions must follow Python/NumPy syntax, e.g.:
 -log(i1(2.6310)/i1(2.5922))/i2[0]
 ''')

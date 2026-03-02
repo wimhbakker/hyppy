@@ -144,7 +144,11 @@ are optional.
             return self.data[:, : , self.real_band(slice(None))]
         elif type(i)!=tuple:
             # one argument, assume we want bands
-            return self.data[:, : ,self.real_band(i)]
+            if type(i)==float:
+                # this is for bandmath so im[2.2] will work...
+                return self.data[: ,: ,self.wavelength2index(i)]
+            else:
+                return self.data[: ,: ,self.real_band(i)]
         elif len(i)==2:
             # two arguments, assume we want a spectrum
             y, x = i

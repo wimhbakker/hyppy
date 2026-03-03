@@ -361,7 +361,7 @@ def dotree(tree, variables, output):
                       projection_info=projection_info)
 
     for variable in variables:
-        locals()[variable] = image[variable][band[variable]]
+        globals()[variable] = image[variable][band[variable]]
 #    print(exp)
     imout[:, :] = eval(exp)
 

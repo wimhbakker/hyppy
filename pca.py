@@ -54,7 +54,8 @@ def pca_inverse(fin, fout, stats=None, band_selection=None, message=message):
     message('calculating inverse PCA...')
     out[...] = numpy.dot(U, numpy.dot(numpy.diag(s), V)).reshape(shape) + Xm
 
-def pca(fin, fout, stats=None, band_selection=None, use_bbl=True, sort_wavelengths=True, message=message):
+def pca(fin, fout, stats=None, band_selection=None, use_bbl=True,
+        sort_wavelengths=True, message=message, do_plot=True):
 
     im = envi2.Open(fin, use_bbl=use_bbl, sort_wavelengths=sort_wavelengths)
 
@@ -103,10 +104,11 @@ def pca(fin, fout, stats=None, band_selection=None, use_bbl=True, sort_wavelengt
 
     del out
 
-    plot(s)
-    title('Singular values = sqrt(Eigenvalues)')
-    xlabel('component')
-    ylabel('singular value')
+    if do_plot:
+        plot(s)
+        title('Singular values = sqrt(Eigenvalues)')
+        xlabel('component')
+        ylabel('singular value')
 
     write_stats(stats, Xm, s, V, wavelength)
 
@@ -277,10 +279,33 @@ def pca_bb_nansafe(fin, fout, stats=None, band_selection=None, bbox=None, use_bb
     write_stats(stats, Xm, s, V, wavelength)
     
 if __name__ == '__main__':
-    print("Run this module using tkPCA.py or tkPCAinverse.py")
-##    pca('/tmp/ORB0422_4_jdat','/tmp/ORB0422_4_jdat_svd')
-##    pca('/tmp/Peppers','/tmp/Peppers_svd')
-##    pca_bb('/tmp/ORB0422_4_jdat','/tmp/ORB0422_4_jdat_svdbb', bbox=(0, 128, 183, 366))
-##    pca_bb_nansafe('/tmp/ORB0422_4_jdat_Gcor','/tmp/ORB0422_4_jdat_Gcor_svdnan')
-##    pca('/tmp/ORB0422_4_jdat','/tmp/ORB0422_4_jdat_pca', stats='/tmp/ORB0422_4_jdat_pca.stats')
-##    pca_inverse('/tmp/ORB0422_4_jdat_pca','/tmp/ORB0422_4_jdat_pca_invpca', stats='/tmp/ORB0422_4_jdat_pca.stats')
+    # command line version
+    import argparse
+    import os
+
+    parser = argparse.ArgumentParser(prog='pca.py',
+        description='Principal Components.')
+
+    parser.add_argument('-s', action='store_true', dest='sort_wavelengths',
+                      help='sort bands on wavelength')
+    parser.add_argument('-b', action='store_true', dest='use_bbl',
+                      help='use bad band list from the header')
+    parser.add_argument('-f', action='store_true', dest='force',
+                      help='force overwrite on existing output file')
+    parser.add_argument('-i', dest='input', help='input file name',
+                        required=True)
+    parser.add_argument('-o', dest='output', help='output file name',
+                        required=True)
+    parser.add_argument('-p', dest='stats', help='statistics output file name',
+                        required=False)
+
+    options = parser.parse_args()
+
+    assert options.force or not os.path.exists(options.output), "Output file exists. Use -f to overwrite."
+
+    pca(options.input, options.output,
+        stats=options.stats,
+        band_selection=None,
+        sort_wavelengths=options.sort_wavelengths,
+        use_bbl=options.use_bbl,
+        do_plot=False)

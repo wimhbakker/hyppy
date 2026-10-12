@@ -53,99 +53,106 @@ def read_emit_2a(filename, message=message, progress=None):
     coordinate_system_string = f"{spatial_ref}"
 
     if 'reflectance' in rootgrp.variables.keys():
-        ## Reflectance data
-        message('reflectance')
-        # lines, samples, bands
-        lines, samples, bands = rootgrp.variables['reflectance'].get_dims()
-        lines, samples, bands = lines.size, samples.size, bands.size
-        message(f"{lines}, {samples}, {bands}")
-        byte_order = 0 if rootgrp.variables['reflectance'].endian() == 'little' else 1
-        data_ignore_value = rootgrp.variables['reflectance']._FillValue
-        message(f"Fill value {data_ignore_value}")
-        data_type = rootgrp.variables['reflectance'].dtype.type
-        message(f"Data type {data_type}")
-
-        ## group sensor_band_parameters
-        # wavelengths
-        wavelengths = rootgrp.groups['sensor_band_parameters'].variables['wavelengths'][...].data
-
-        # fwhm: variable fwhm
-        fwhm = rootgrp.groups['sensor_band_parameters'].variables['fwhm'][...].data
-
-        # bbl: variable good_wavelengths
-        bbl = rootgrp.groups['sensor_band_parameters'].variables['good_wavelengths'][...].data
-
-        map_info = ["Geogrphic Lat/Lon", 1.5, 1.5, west, north, res, res, \
-                    "WGS-84", "units=Degrees"]
-        message(f"{map_info}")
-
-        im = envi2.New(basename + '_refl', lines=lines, samples=samples, bands=bands, \
-                       wavelength=wavelengths, fwhm=fwhm, bbl=bbl, data_type=data_type, \
-                       file_type=ENVI_Standard, interleave=ENVI_BIL,
-                       byte_order=byte_order, data_ignore_value=data_ignore_value,
-                       description=description, \
-                       coordinate_system_string=coordinate_system_string, \
-                       map_info=map_info)
-                       
-        im[...] = rootgrp.variables['reflectance'][...].data
-        del im
-
-        ## group location
-        message('location data')
-        # longitude
-        # lines, samples, bands
-        lines, samples = rootgrp.groups['location'].variables['lon'].get_dims()
-        lines, samples = lines.size, samples.size
-        message(f"{lines}, {samples}")
-        data_type = rootgrp.groups['location'].variables['lon'].dtype.type
-        message(data_type)
-
-        im = envi2.New(basename + '_lonlat', lines=lines, samples=samples, bands=2, \
-                       band_names=['longitude', 'latitude'], \
-                       wavelength=None, fwhm=None, bbl=None, data_type=data_type, \
-                       file_type=ENVI_Standard, interleave=ENVI_BSQ)
-
-        im[0] = rootgrp.groups['location'].variables['lon'][...].data
-
-        # latitude
-        im[1] = rootgrp.groups['location'].variables['lat'][...].data
-        del im
-
-        # elevation
-        message('elevation data')
-        lines, samples = rootgrp.groups['location'].variables['elev'].get_dims()
-        lines, samples = lines.size, samples.size
-        message(f"{lines}, {samples}")
-        data_type = rootgrp.groups['location'].variables['elev'].dtype.type
-        message(data_type)
-
-        im = envi2.New(basename + '_elev', lines=lines, samples=samples, bands=1, \
-                       band_names=['elevation'], \
-                       wavelength=None, fwhm=None, bbl=None, data_type=data_type, \
-                       file_type=ENVI_Standard, interleave=ENVI_BSQ)
-
-        im[0] = rootgrp.groups['location'].variables['elev'][...].data
-
-        # glt_x, int32
-        message('glt data')
-        lines, samples = rootgrp.groups['location'].variables['glt_x'].get_dims()
-        lines, samples = lines.size, samples.size
-        message(f"{lines}, {samples}")
-        data_type = rootgrp.groups['location'].variables['glt_x'].dtype.type
-        message(data_type)
-
-        im = envi2.New(basename + '_glt', lines=lines, samples=samples, bands=2, \
-                       band_names=['glt_x', 'glt_y'], \
-                       wavelength=None, fwhm=None, bbl=None, data_type=data_type, \
-                       file_type=ENVI_Standard, interleave=ENVI_BSQ)
-
-        im[0] = rootgrp.groups['location'].variables['glt_x'][...].data
-
-        # glt_y, int32
-        im[1] = rootgrp.groups['location'].variables['glt_y'][...].data
-        del im
+        data_var = 'reflectance'
+        outname = basename + '_rfl'
+    elif 'reflectance_uncertainty' in rootgrp.variables.keys():
+        data_var = 'reflectance_uncertainty'
+        outname = basename + '_rfluncert'
     else:
+        message(f"root group variables: {rootgrp.variables.keys()}")
         raise IOError('No reflectance data found in dataset')
+        
+    ## Reflectance data
+    message(data_var)
+    # lines, samples, bands
+    lines, samples, bands = rootgrp.variables[data_var].get_dims()
+    lines, samples, bands = lines.size, samples.size, bands.size
+    message(f"{lines}, {samples}, {bands}")
+    byte_order = 0 if rootgrp.variables[data_var].endian() == 'little' else 1
+    data_ignore_value = rootgrp.variables[data_var]._FillValue
+    message(f"Fill value {data_ignore_value}")
+    data_type = rootgrp.variables[data_var].dtype.type
+    message(f"Data type {data_type}")
+
+    ## group sensor_band_parameters
+    # wavelengths
+    wavelengths = rootgrp.groups['sensor_band_parameters'].variables['wavelengths'][...].data
+
+    # fwhm: variable fwhm
+    fwhm = rootgrp.groups['sensor_band_parameters'].variables['fwhm'][...].data
+
+    # bbl: variable good_wavelengths
+    bbl = rootgrp.groups['sensor_band_parameters'].variables['good_wavelengths'][...].data
+
+    map_info = ["Geogrphic Lat/Lon", 1.0, 1.0, west, north, res, res, \
+                "WGS-84", "units=Degrees"]
+    message(f"{map_info}")
+
+    im = envi2.New(outname, lines=lines, samples=samples, bands=bands, \
+                   wavelength=wavelengths, fwhm=fwhm, bbl=bbl, data_type=data_type, \
+                   file_type=ENVI_Standard, interleave=ENVI_BIL,
+                   byte_order=byte_order, data_ignore_value=data_ignore_value,
+                   description=description, \
+                   coordinate_system_string=coordinate_system_string, \
+                   map_info=map_info)
+                   
+    im[...] = rootgrp.variables[data_var][...].data
+    del im
+
+    ## group location
+    message('location data')
+    # longitude
+    # lines, samples, bands
+    lines, samples = rootgrp.groups['location'].variables['lon'].get_dims()
+    lines, samples = lines.size, samples.size
+    message(f"{lines}, {samples}")
+    data_type = rootgrp.groups['location'].variables['lon'].dtype.type
+    message(data_type)
+
+    im = envi2.New(basename + '_lonlat', lines=lines, samples=samples, bands=2, \
+                   band_names=['longitude', 'latitude'], \
+                   wavelength=None, fwhm=None, bbl=None, data_type=data_type, \
+                   file_type=ENVI_Standard, interleave=ENVI_BSQ)
+
+    im[0] = rootgrp.groups['location'].variables['lon'][...].data
+
+    # latitude
+    im[1] = rootgrp.groups['location'].variables['lat'][...].data
+    del im
+
+    # elevation
+    message('elevation data')
+    lines, samples = rootgrp.groups['location'].variables['elev'].get_dims()
+    lines, samples = lines.size, samples.size
+    message(f"{lines}, {samples}")
+    data_type = rootgrp.groups['location'].variables['elev'].dtype.type
+    message(data_type)
+
+    im = envi2.New(basename + '_elev', lines=lines, samples=samples, bands=1, \
+                   band_names=['elevation'], \
+                   wavelength=None, fwhm=None, bbl=None, data_type=data_type, \
+                   file_type=ENVI_Standard, interleave=ENVI_BSQ)
+
+    im[0] = rootgrp.groups['location'].variables['elev'][...].data
+
+    # glt_x, int32
+    message('glt data')
+    lines, samples = rootgrp.groups['location'].variables['glt_x'].get_dims()
+    lines, samples = lines.size, samples.size
+    message(f"{lines}, {samples}")
+    data_type = rootgrp.groups['location'].variables['glt_x'].dtype.type
+    message(data_type)
+
+    im = envi2.New(basename + '_glt', lines=lines, samples=samples, bands=2, \
+                   band_names=['glt_x', 'glt_y'], \
+                   wavelength=None, fwhm=None, bbl=None, data_type=data_type, \
+                   file_type=ENVI_Standard, interleave=ENVI_BSQ)
+
+    im[0] = rootgrp.groups['location'].variables['glt_x'][...].data
+
+    # glt_y, int32
+    im[1] = rootgrp.groups['location'].variables['glt_y'][...].data
+    del im
 
 if __name__ == '__main__':
     # command line version
@@ -155,14 +162,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='convemit.py',
         description='Convert EMIT image to ENVI format.')
 
-#    parser.add_argument('-f', action='store_true', dest='force',
-#                      help='force overwrite on existing output file')
     parser.add_argument('-i', dest='input', help='input file name', required=True)
-#    parser.add_argument('-o', dest='output', help='output file name', required=True)
 
     options = parser.parse_args()
-
-##    assert options.force or not os.path.exists(options.output), "Output file exists. Use -f to overwrite."
 
     read_emit_2a(options.input)
 

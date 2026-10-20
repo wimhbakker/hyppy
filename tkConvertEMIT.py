@@ -62,7 +62,7 @@ class Application(Frame):
         self.message("Running, please wait...")
         try:
             self.message("Converting EMIT...")
-            convemit.read_emit_2a(self.nameIn.get(), message=self.message)
+            convemit.read_emit_2a(self.nameIn.get(), maskname=self.maskIn.get(), message=self.message)
 
             self.message("Completed!")
         except Exception as err:
@@ -81,6 +81,16 @@ class Application(Frame):
             conf.set_option('input-dir', os.path.dirname(name))
             self.nameIn.set(name)
         
+    def pick_input_mask(self):
+        self.message("Pick input mask.")
+        idir = conf.get_option('input-dir')
+        name = askopenfilename(title='Open Mask File',
+                                   initialdir=idir,
+                                   initialfile='')
+        if name:
+            conf.set_option('input-dir', os.path.dirname(name))
+            self.maskIn.set(name)
+
     def message(self, s):
         s = str(s)
         if len(s)==1:
@@ -93,6 +103,7 @@ class Application(Frame):
     def makeWindow(self, master=None):
         # variables
         self.nameIn = StringVar()
+        self.maskIn = StringVar()
 
         row = 0
 
@@ -102,9 +113,13 @@ class Application(Frame):
         self.frame1.columnconfigure(1, weight=1)
         self.frame1.rowconfigure(0, weight=1)
 
-        Label(self.frame1, text="Input").grid(row=1, column=0, sticky=W)
+        Label(self.frame1, text="Input RFL ").grid(row=1, column=0, sticky=W)
         Entry(self.frame1, textvariable=self.nameIn, width=30).grid(row=1, column=1, sticky=W+E)
         Button(self.frame1, text='...', command=self.pick_input).grid(row=1, column=2, sticky=W)
+
+        Label(self.frame1, text="Input MASK").grid(row=2, column=0, sticky=W)
+        Entry(self.frame1, textvariable=self.maskIn, width=30).grid(row=2, column=1, sticky=W+E)
+        Button(self.frame1, text='...', command=self.pick_input_mask).grid(row=2, column=2, sticky=W)
 
         row = row + 1
 
@@ -126,7 +141,7 @@ class Application(Frame):
         self.frame3.columnconfigure(0, weight=1)
         self.frame3.rowconfigure(0, weight=1)
         
-        self.text = Text(self.frame3, width=30, height=10)
+        self.text = Text(self.frame3, width=60, height=10)
         self.text.grid(row=0, column=0, sticky=N+E+S+W)
 
         # scrollbar

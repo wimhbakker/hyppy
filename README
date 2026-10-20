@@ -44,6 +44,7 @@ In order to run, HypPy needs Python3 plus additional modules. These can be picke
     pyproj (for conversion to KML) 
     netCDF4 (for conversion of EMIT data)
     h5py (for conversion or PRISMA data)
+    rasterio (for conversion of EnMAP data)
 
 Installers for these packages can be found at the pages listed under the quick links menu.
 HypPy Download
@@ -66,6 +67,7 @@ The following packages are needed on Linux:
     pip install pyproj 
     pip install netCDF4
     pip install h5py
+    pip install rasterio
 
 Since there's no regular installer yet, the next best thing you can do is to create a new directory for HypPy and to unpack the tar file into this directory:
 
@@ -109,7 +111,7 @@ The documentation of HypPy is contained by the code. The documentation is split 
 2. The Scripting Manual for the conmmandline-interface (CLI). 
 3. The Programming Manual for Pythonites.
 
-As the package is in development, the documentation is never really finished. But I think the documentation is at least 90% complete.
+As the package is in development, the documentation is never really finished.
 
 HypPy Contact
 

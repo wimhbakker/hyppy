@@ -64,7 +64,9 @@ import numpy as np
 from netCDF4 import Dataset
 
 import envi2
-from envi2.constants import * 
+from envi2.constants import *
+
+import glt
 
 DEBUG = False
 
@@ -159,6 +161,7 @@ def read_emit_2a(filename, maskname=None, message=message, progress=None):
 
     message(f"Writing output {os.path.basename(outname)}")
 
+    reflname = outname
     im = envi2.New(outname, lines=lines, samples=samples, bands=bands, \
                    wavelength=wavelengths, fwhm=fwhm, bbl=bbl, data_type=data_type, \
                    file_type=ENVI_Standard, interleave=ENVI_BIL,
@@ -222,6 +225,7 @@ def read_emit_2a(filename, maskname=None, message=message, progress=None):
         message(data_type)
 
     message(f"Writing Geographic Lookup Table (GLT) {os.path.basename(basename + '_glt')}")
+    gltname = basename + '_glt'
     im = envi2.New(basename + '_glt', lines=lines, samples=samples, bands=2, \
                    band_names=['glt_x', 'glt_y'], \
                    wavelength=None, fwhm=None, bbl=None, data_type=data_type, \
@@ -232,6 +236,11 @@ def read_emit_2a(filename, maskname=None, message=message, progress=None):
     # glt_y, int32
     im[1] = rootgrp.groups['location'].variables['glt_y'][...].data
     del im
+
+    # Applying GLT
+    message(f"Applying GLT")
+    message(f"Writing {os.path.basename(reflname+'_geo')}")
+    glt.forward(reflname, gltname, reflname+'_geo')
 
 if __name__ == '__main__':
     # command line version

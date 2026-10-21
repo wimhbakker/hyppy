@@ -5,6 +5,10 @@
 ##     Modified 20221107 WHB, added support for map_info
 ##              Supported are: utm wgs84, utm ed50 and geographic wgs84
 ##              Does a datum transform from utm ed50 to utm wgs84
+##     Modified (fix): replaced deprecated/removed pyproj.transform() with
+##              pyproj.Transformer, corrected lower-left/upper-right corner
+##              computation, honour ENVI reference pixel, fail cleanly on
+##              unsupported ellipsoids, report errors instead of bare except.
 ##
 ## This program is free software: you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by the
@@ -65,7 +69,8 @@ def get_bounding_box(im):
         pass
 
     try:
-        if im.header.map_info[0] in ("Arbitrary", "Geographic Lat/Lon", "UTM"):
+        if im.header.map_info[0] in ("Arbitrary", "Geographic Lat/Lon", "UTM") or \
+           im.header.map_info[0].startswith("Geogr"):
             x, y, resx, resy = im.header.map_info[3:7]
             return (y, x, y - resy * im.lines, x + resx * im.samples)
     except AttributeError:
@@ -125,6 +130,36 @@ def create_kml(fbase, im, target=TARGET_MARS):
     f.close()
 
 
+def get_map_corners(im, x0, y0, X0, Y0, Xdelta, Ydelta):
+    """Return the four image corners in map coordinates.
+
+    ENVI map_info gives the map coordinates (X0, Y0) of reference pixel
+    (x0, y0), where (1.0, 1.0) is the upper-left corner of the upper-left
+    pixel. The upper-left corner of the image is therefore found by stepping
+    back (x0 - 1) pixels in x and (y0 - 1) pixels in y. For the usual
+    reference pixel (1, 1) this is simply (X0, Y0).
+
+    Returns ((XUL, YUL), (XLL, YLL), (XLR, YLR), (XUR, YUR)).
+    """
+    x0 = float(x0)
+    y0 = float(y0)
+
+    # upper left
+    XUL = X0 - (x0 - 1.0) * Xdelta
+    YUL = Y0 + (y0 - 1.0) * Ydelta
+
+    # lower left
+    XLL, YLL = XUL, YUL - im.lines * Ydelta
+
+    # lower right
+    XLR, YLR = XUL + im.samples * Xdelta, YUL - im.lines * Ydelta
+
+    # upper right
+    XUR, YUR = XUL + im.samples * Xdelta, YUL
+
+    return (XUL, YUL), (XLL, YLL), (XLR, YLR), (XUR, YUR)
+
+
 def create_kml_quad_from_map_info_utm(fbase, png, im, target=TARGET_MARS):
     import pyproj
 
@@ -145,40 +180,36 @@ def create_kml_quad_from_map_info_utm(fbase, png, im, target=TARGET_MARS):
         message("Unsupported map info size from ENVI header")
         return
 
+    zone = int(zone)
+
     if "WGS" in ellps:
-        ellps = "WGS84"
+        # WGS84 / UTM: EPSG:326zz (north) or EPSG:327zz (south)
         if hemisphere.lower() == "north":
-            p = pyproj.Proj(proj="utm", zone=zone, north=True, ellps=ellps, units="m")
+            crs_in = pyproj.CRS.from_epsg(32600 + zone)
         else:
-            p = pyproj.Proj(proj="utm", zone=zone, south=True, ellps=ellps, units="m")
+            crs_in = pyproj.CRS.from_epsg(32700 + zone)
     elif "European 1950" in ellps:
-        ellps = "intl"
-        p = pyproj.Proj("EPSG:23030")
+        # ED50 / UTM zone zz N: EPSG:230zz (defined for zones 28 - 38)
+        if not 28 <= zone <= 38:
+            message("Unsupported ED50 UTM zone %d (supported: 28-38)" % (zone,))
+            return
+        crs_in = pyproj.CRS.from_epsg(23000 + zone)
     else:
         message("Unsupported ellipse %s" % (ellps,))
+        return
 
-    pgoal = pyproj.Proj("EPSG:4326")
+    # always_xy=True: input is (easting, northing), output is (lon, lat)
+    transformer = pyproj.Transformer.from_crs(crs_in, "EPSG:4326", always_xy=True)
 
-    # lower left
-    X1, Y1 = X0 + Xdelta, Y0 - im.lines * Ydelta
+    (XUL, YUL), (XLL, YLL), (XLR, YLR), (XUR, YUR) = get_map_corners(
+        im, x0, y0, X0, Y0, Xdelta, Ydelta
+    )
 
-    # lower right
-    X2, Y2 = X0 + im.samples * Xdelta, Y0 - im.lines * Ydelta
-
-    # upper right
-    X3, Y3 = X0 + im.samples * Xdelta, Y0
-
-    ##    # inverse projection from UTM to geographic
-    ##    lon0, lat0 = p(X0, Y0, inverse=True)
-    ##    lon1, lat1 = p(X1, Y1, inverse=True)
-    ##    lon2, lat2 = p(X2, Y2, inverse=True)
-    ##    lon3, lat3 = p(X3, Y3, inverse=True)
-
-    # inverse projection from UTM x, y to geographic lat, lon
-    lat0, lon0 = pyproj.transform(p, pgoal, X0, Y0)
-    lat1, lon1 = pyproj.transform(p, pgoal, X1, Y1)
-    lat2, lon2 = pyproj.transform(p, pgoal, X2, Y2)
-    lat3, lon3 = pyproj.transform(p, pgoal, X3, Y3)
+    # inverse projection from UTM x, y to geographic lon, lat
+    lon0, lat0 = transformer.transform(XUL, YUL)  # upper left
+    lon1, lat1 = transformer.transform(XLL, YLL)  # lower left
+    lon2, lat2 = transformer.transform(XLR, YLR)  # lower right
+    lon3, lat3 = transformer.transform(XUR, YUR)  # upper right
 
     write_kml_quad(
         kmlname, target, name, png, lon1, lat1, lon2, lat2, lon3, lat3, lon0, lat0
@@ -198,17 +229,15 @@ def create_kml_quad_from_map_info_geographic(fbase, png, im, target=TARGET_MARS)
         ellps = "intl"
     else:
         message("Unsupported ellipse %s" % (ellps,))
+        return
 
-    # lower left
-    X1, Y1 = X0 + Xdelta, Y0 - im.lines * Ydelta
+    (XUL, YUL), (XLL, YLL), (XLR, YLR), (XUR, YUR) = get_map_corners(
+        im, x0, y0, X0, Y0, Xdelta, Ydelta
+    )
 
-    # lower right
-    X2, Y2 = X0 + im.samples * Xdelta, Y0 - im.lines * Ydelta
-
-    # upper right
-    X3, Y3 = X0 + im.samples * Xdelta, Y0
-
-    write_kml_quad(kmlname, target, name, png, X1, Y1, X2, Y2, X3, Y3, X0, Y0)
+    write_kml_quad(
+        kmlname, target, name, png, XLL, YLL, XLR, YLR, XUR, YUR, XUL, YUL
+    )
 
 
 def create_kml_quad_from_geo_points(fbase, png, im, target=TARGET_MARS):
@@ -368,14 +397,14 @@ def tokml(
                     fbase + "_map_info", png, im, target=target
                 )
                 message("KML file created from map info (utm)")
-            elif "geographic" in proj:
+            elif proj.startswith("geogr"):
                 create_kml_quad_from_map_info_geographic(
                     fbase + "_map_info", png, im, target=target
                 )
                 message("KML file created from map info (geographic)")
 
-    except:
-        message("Skipping KML file.")
+    except Exception as e:
+        message("Skipping KML file (%s: %s)." % (type(e).__name__, e))
 
     try:
         if force or not os.path.exists(pgw):
@@ -383,8 +412,8 @@ def tokml(
             message("World file created")
         else:
             message("PGW exists. Skipped.")
-    except:
-        message("Skipping World File.")
+    except Exception as e:
+        message("Skipping World File (%s: %s)." % (type(e).__name__, e))
 
     del im
 

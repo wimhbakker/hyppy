@@ -155,7 +155,7 @@ def read_emit_2a(filename, maskname=None, message=message, progress=None):
     # bbl: variable good_wavelengths
     bbl = rootgrp.groups['sensor_band_parameters'].variables['good_wavelengths'][...].data
 
-    map_info = ["Geogrphic Lat/Lon", 1.0, 1.0, west, north, res, res, \
+    map_info = ["Geographic Lat/Lon", 1.0, 1.0, west, north, res, res, \
                 "WGS-84", "units=Degrees"]
     message(f"map info: {map_info}")
 

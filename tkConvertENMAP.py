@@ -74,12 +74,13 @@ class Application(Frame):
     def do_exit(self):
         root.quit()
 
-    def pick_input(self):
-        self.message("Pick input file.")
+    def pick_input_xml(self):
+        self.message("Pick metadata file.")
         idir = conf.get_option('input-dir')
-        name = askopenfilename(title='Open Input File',
+        name = askopenfilename(title='Open Metadata File',
                                    initialdir=idir,
-                                   initialfile='')
+                                   initialfile='',
+                               filetypes=[('xml', '*.xml'), ('xml', '*.XML')])
         if name:
             conf.set_option('input-dir', os.path.dirname(name))
             self.nameIn.set(name)
@@ -113,7 +114,7 @@ class Application(Frame):
 
         Label(self.frame1, text="METADATA.XML: ").grid(row=1, column=0, sticky=W)
         Entry(self.frame1, textvariable=self.nameIn, width=30).grid(row=1, column=1, sticky=W+E)
-        Button(self.frame1, text='...', command=self.pick_input).grid(row=1, column=2, sticky=W)
+        Button(self.frame1, text='...', command=self.pick_input_xml).grid(row=1, column=2, sticky=W)
 
         row = row + 1
 

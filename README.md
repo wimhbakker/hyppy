@@ -128,7 +128,7 @@ If you produce any scientific output using HypPy, please consider citing the ref
 
 - WH Bakker, KS Schmidt, *Hyperspectral edge filtering for measuring homogeneity of surface cover types*, ISPRS Journal of Photogrammetry and Remote Sensing, vol. 56, ed. 4, pp 246-256, 2002, Elsevier, [DOI](http://dx.doi.org/10.1016/S0924-2716(02)00060-6)
 
-- WH Bakker, FJA van Ruitenbeek, HMA van der Werff, TE Zegers, JHP Oosthoek, SH Marsh, FD van der Meer, Processing OMEGA/Mars Express hyperspectral imagery from radiance-at-sensor to surface reflectance, Planetary and Space Science, vol. 90, pages 1-9, 2014, Pergamon, [DOI](http://dx.doi.org/10.1016/j.pss.2013.11.007)
+- WH Bakker, FJA van Ruitenbeek, HMA van der Werff, TE Zegers, JHP Oosthoek, SH Marsh, FD van der Meer, *Processing OMEGA/Mars Express hyperspectral imagery from radiance-at-sensor to surface reflectance*, Planetary and Space Science, vol. 90, pages 1-9, 2014, Pergamon, [DOI](http://dx.doi.org/10.1016/j.pss.2013.11.007)
 
 - FJA van Ruitenbeek, WH Bakker, HMA van der Werff, TE Zegers, JHP Oosthoek, ZA Omer, SH Marsh, FD van der Meer, *Mapping the wavelength position of absorption features between 2.1 and 2.4 μm: a new method for exploratory analysis of OMEGA/Mars Express hyperspectral imagery*, Planetary and Space Science, Volume 101, 15 October 2014, Pages 108-117, Pergamon, [DOI](http://dx.doi.org/10.1016/j.pss.2014.06.009)
 

@@ -37,6 +37,7 @@ def read_enmap(fname, message=message, apply_pixelmask=True, apply_cloudmask=Tru
 
     pixelmask = None
     cloudmask = None
+    imagefilename = None
 
     for f in filelist:
         base, ext = os.path.splitext(f)
@@ -68,6 +69,9 @@ def read_enmap(fname, message=message, apply_pixelmask=True, apply_cloudmask=Tru
                         cloudmask = cloudmask | band1[0]
                     message(f"Reading {ql_quality} {cloudmask.shape}")
 
+    if imagefilename is None:
+        raise IOError("No spectral image found in metadata")
+    
     if cloudmask is not None:
         message("Dilating cloudmask")
         struct_plus = np.array([[0, 1, 0],

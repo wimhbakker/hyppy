@@ -772,6 +772,15 @@ S.convolve([1/4., 1/2., 1/4.]).convolve([1/4., 1/2., 1/4.])
             wavelength = self.wavelength
         return Spectrum(wavelength=wavelength, spectrum=spl(wavelength), name=self.name, description=self.description)
 
+    def polynomialfit(self, deg=2):
+        """Polynomial fit of degree deg.
+"""
+        x = self.wavelength
+        y = self.spectrum
+        poly = numpy.polynomial.Polynomial.fit(x, y, deg=deg)
+        y_fit = poly(x)
+        return Spectrum(wavelength=x, spectrum=y_fit, name=self.name, description=self.description)
+
     def medfilt(self, n=3):
         """Smooth spectrum with a median filter.
 
